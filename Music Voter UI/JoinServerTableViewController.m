@@ -45,6 +45,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JoinServerCell" forIndexPath:indexPath];
     
+    UIView *selectionBackgroundView = [[UIView alloc] init];
+    selectionBackgroundView.backgroundColor = [UIColor colorWithRed:(63/255.0) green:(63/255.0) blue:(63/255.0) alpha:1];
+    cell.selectedBackgroundView = selectionBackgroundView;
     cell.textLabel.text = [self.items objectAtIndex:indexPath.row];
     
     return cell;
