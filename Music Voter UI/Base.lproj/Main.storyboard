@@ -507,27 +507,6 @@
                                             <constraint firstAttribute="width" secondItem="018-Xr-JmL" secondAttribute="height" multiplier="1:1" id="oJr-XL-FNj"/>
                                         </constraints>
                                     </imageView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Emj-CQ-osS">
-                                        <rect key="frame" x="500" y="8" width="60" height="84"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ldN-It-F5a">
-                                                <rect key="frame" x="8" y="8" width="44" height="68"/>
-                                                <animations/>
-                                                <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                                <state key="normal" title="Play"/>
-                                            </button>
-                                        </subviews>
-                                        <animations/>
-                                        <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottomMargin" secondItem="ldN-It-F5a" secondAttribute="bottom" id="398-nj-HHL"/>
-                                            <constraint firstItem="ldN-It-F5a" firstAttribute="leading" secondItem="Emj-CQ-osS" secondAttribute="leadingMargin" id="l2W-XV-Qoz"/>
-                                            <constraint firstItem="ldN-It-F5a" firstAttribute="top" secondItem="Emj-CQ-osS" secondAttribute="topMargin" id="mRI-XY-Pzb"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="ldN-It-F5a" secondAttribute="trailing" id="uPp-Ud-nuu"/>
-                                            <constraint firstAttribute="width" constant="60" id="vVY-6v-XeN"/>
-                                        </constraints>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2j2-2x-s41">
                                         <rect key="frame" x="92" y="8" width="408" height="84"/>
                                         <subviews>
@@ -568,6 +547,27 @@
                                             <constraint firstItem="8sS-BH-yrh" firstAttribute="leading" secondItem="2j2-2x-s41" secondAttribute="leadingMargin" id="coY-8c-iBc"/>
                                             <constraint firstItem="lj5-27-Qge" firstAttribute="top" secondItem="2j2-2x-s41" secondAttribute="topMargin" id="daH-dd-Qrf"/>
                                             <constraint firstItem="EhI-Wy-a6Y" firstAttribute="top" secondItem="lj5-27-Qge" secondAttribute="bottom" id="vdL-X7-75K"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Emj-CQ-osS">
+                                        <rect key="frame" x="500" y="8" width="60" height="84"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ldN-It-F5a">
+                                                <rect key="frame" x="8" y="8" width="44" height="68"/>
+                                                <animations/>
+                                                <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <state key="normal" title="Play"/>
+                                            </button>
+                                        </subviews>
+                                        <animations/>
+                                        <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottomMargin" secondItem="ldN-It-F5a" secondAttribute="bottom" id="398-nj-HHL"/>
+                                            <constraint firstItem="ldN-It-F5a" firstAttribute="leading" secondItem="Emj-CQ-osS" secondAttribute="leadingMargin" id="l2W-XV-Qoz"/>
+                                            <constraint firstItem="ldN-It-F5a" firstAttribute="top" secondItem="Emj-CQ-osS" secondAttribute="topMargin" id="mRI-XY-Pzb"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="ldN-It-F5a" secondAttribute="trailing" id="uPp-Ud-nuu"/>
+                                            <constraint firstAttribute="width" constant="60" id="vVY-6v-XeN"/>
                                         </constraints>
                                     </view>
                                 </subviews>
