@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BonjourBrowser.h"
+#import "MusicVoterServer.h"
+#import "JoinedServerTableViewController.h"
+#import "ServerConnection.h"
 
-@interface JoinServerTableViewController : UITableViewController
+@interface JoinServerTableViewController : UITableViewController <BonjourBrowserDelegate>
 
 @end

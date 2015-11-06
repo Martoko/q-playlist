@@ -10,7 +10,11 @@
 
 @interface JoinServerTableViewController ()
 
-@property NSArray* items;
+@property BonjourBrowser* bonjourBrowser;
+
+//DEBUG
+@property MusicVoterServer* musicVoterServer;
+//END DEBUG
 
 @end
 
@@ -19,12 +23,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.musicVoterServer = [[MusicVoterServer alloc] init];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    self.bonjourBrowser = [[BonjourBrowser alloc] init];
+    self.bonjourBrowser.delegate = self;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.items = [[NSArray alloc] initWithObjects:@"Example server 1", @"Example server 2", nil];
+    if (self.musicVoterServer.published == NO) {
+        [self.musicVoterServer publish];
+    }
+}
+
+
+- (void)viewDidDisappear:(BOOL)animated {
+    self.bonjourBrowser.delegate = nil;
+    self.bonjourBrowser = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,62 +53,39 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.items.count;
+    return self.bonjourBrowser.foundServers.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JoinServerCell" forIndexPath:indexPath];
     
-    UIView *selectionBackgroundView = [[UIView alloc] init];
-    selectionBackgroundView.backgroundColor = [UIColor colorWithRed:(63/255.0) green:(63/255.0) blue:(63/255.0) alpha:1];
-    cell.selectedBackgroundView = selectionBackgroundView;
-    cell.textLabel.text = [self.items objectAtIndex:indexPath.row];
+    NSNetService* server = [self.bonjourBrowser.foundServers objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = server.name;
     
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+#pragma mark - BonjourBrowser delegate
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+-(void) serverlistChanged {
+    [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier  isEqual: @"JoinServerToJoinedServer"]) {
+        JoinedServerTableViewController* newViewController = [segue destinationViewController];
+        NSIndexPath *selectedPath = [self.tableView indexPathForSelectedRow];
+        NSNetService* selectedNetService = [self.bonjourBrowser.foundServers objectAtIndex:selectedPath.row];
+        
+        
+        newViewController.serverConnection = [[ServerConnection alloc] initWithNetService:selectedNetService];
+    }
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
 
 @end

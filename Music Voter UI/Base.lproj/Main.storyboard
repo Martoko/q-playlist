@@ -98,7 +98,6 @@
                             <constraint firstItem="bqT-Z4-CxM" firstAttribute="top" secondItem="gud-4S-exz" secondAttribute="bottom" id="DKt-1f-CcU"/>
                             <constraint firstItem="Q0J-T4-1aj" firstAttribute="top" secondItem="bqT-Z4-CxM" secondAttribute="bottom" id="YRn-0u-4oF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="bqT-Z4-CxM" secondAttribute="trailing" id="hz9-jd-9d8"/>
-                            <constraint firstItem="bqT-Z4-CxM" firstAttribute="top" secondItem="gud-4S-exz" secondAttribute="bottom" id="iH0-jV-XAn"/>
                             <constraint firstItem="bqT-Z4-CxM" firstAttribute="leading" secondItem="MRU-1t-Gpg" secondAttribute="leadingMargin" id="r71-sd-3PZ"/>
                         </constraints>
                     </view>
