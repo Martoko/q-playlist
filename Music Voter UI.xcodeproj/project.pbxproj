@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B62450E31BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */; };
+		B62450E41BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */; };
+		B62450EC1BED431E000ACBD3 /* CreatedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450CE1BED431E000ACBD3 /* CreatedServerTableViewController.m */; };
+		B62450ED1BED431E000ACBD3 /* CreateServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */; };
+		B62450EF1BED431E000ACBD3 /* JoinedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D31BED431E000ACBD3 /* JoinedServerTableViewController.m */; };
+		B62450F01BED431E000ACBD3 /* JoinServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D51BED431E000ACBD3 /* JoinServerTableViewController.m */; };
+		B62450F51BED431E000ACBD3 /* SingleVoteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450DE1BED431E000ACBD3 /* SingleVoteTableViewCell.m */; };
+		B62450F61BED431E000ACBD3 /* SpotifyAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450E01BED431E000ACBD3 /* SpotifyAuthenticator.m */; };
+		B62450FD1BED43CB000ACBD3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */; };
+		B62450FF1BED43F3000ACBD3 /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62450FE1BED43F3000ACBD3 /* Spotify.framework */; };
 		B6372EB21BD4D22F00574261 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6372EB11BD4D22F00574261 /* main.m */; };
 		B6372EB51BD4D22F00574261 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6372EB41BD4D22F00574261 /* AppDelegate.m */; };
 		B6372EBB1BD4D22F00574261 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6372EB91BD4D22F00574261 /* Main.storyboard */; };
@@ -45,6 +55,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B62450BB1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemToCreatedServerTableViewController.h; sourceTree = "<group>"; };
+		B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemToCreatedServerTableViewController.m; sourceTree = "<group>"; };
+		B62450BD1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemToJoinedServerTableViewController.h; sourceTree = "<group>"; };
+		B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemToJoinedServerTableViewController.m; sourceTree = "<group>"; };
+		B62450CD1BED431E000ACBD3 /* CreatedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedServerTableViewController.h; sourceTree = "<group>"; };
+		B62450CE1BED431E000ACBD3 /* CreatedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedServerTableViewController.m; sourceTree = "<group>"; };
+		B62450CF1BED431E000ACBD3 /* CreateServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateServerTableViewController.h; sourceTree = "<group>"; };
+		B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateServerTableViewController.m; sourceTree = "<group>"; };
+		B62450D21BED431E000ACBD3 /* JoinedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinedServerTableViewController.h; sourceTree = "<group>"; };
+		B62450D31BED431E000ACBD3 /* JoinedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinedServerTableViewController.m; sourceTree = "<group>"; };
+		B62450D41BED431E000ACBD3 /* JoinServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinServerTableViewController.h; sourceTree = "<group>"; };
+		B62450D51BED431E000ACBD3 /* JoinServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinServerTableViewController.m; sourceTree = "<group>"; };
+		B62450DD1BED431E000ACBD3 /* SingleVoteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleVoteTableViewCell.h; sourceTree = "<group>"; };
+		B62450DE1BED431E000ACBD3 /* SingleVoteTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleVoteTableViewCell.m; sourceTree = "<group>"; };
+		B62450DF1BED431E000ACBD3 /* SpotifyAuthenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpotifyAuthenticator.h; sourceTree = "<group>"; };
+		B62450E01BED431E000ACBD3 /* SpotifyAuthenticator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpotifyAuthenticator.m; sourceTree = "<group>"; };
+		B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		B62450FE1BED43F3000ACBD3 /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
 		B6372EAD1BD4D22F00574261 /* Music Voter UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Music Voter UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6372EB11BD4D22F00574261 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B6372EB31BD4D22F00574261 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -84,6 +112,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B62450FF1BED43F3000ACBD3 /* Spotify.framework in Frameworks */,
+				B62450FD1BED43CB000ACBD3 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +137,8 @@
 		B6372EA41BD4D22F00574261 = {
 			isa = PBXGroup;
 			children = (
+				B62450FE1BED43F3000ACBD3 /* Spotify.framework */,
+				B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */,
 				B643BCBD1BED2D3C00688937 /* Icons */,
 				B6372EAF1BD4D22F00574261 /* Music Voter UI */,
 				B6372EC91BD4D22F00574261 /* Music Voter UITests */,
@@ -138,9 +170,6 @@
 				B67D4E801BED4215004CFE38 /* Clientside */,
 				B67D4E871BED4237004CFE38 /* UI */,
 				B6372EB91BD4D22F00574261 /* Main.storyboard */,
-				B6372EBC1BD4D22F00574261 /* Assets.xcassets */,
-				B6372EBE1BD4D22F00574261 /* LaunchScreen.storyboard */,
-				B6372EC11BD4D22F00574261 /* Info.plist */,
 				B6372EB01BD4D22F00574261 /* Supporting Files */,
 			);
 			path = "Music Voter UI";
@@ -149,6 +178,9 @@
 		B6372EB01BD4D22F00574261 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B6372EBE1BD4D22F00574261 /* LaunchScreen.storyboard */,
+				B6372EBC1BD4D22F00574261 /* Assets.xcassets */,
+				B6372EC11BD4D22F00574261 /* Info.plist */,
 				B6372EB31BD4D22F00574261 /* AppDelegate.h */,
 				B6372EB41BD4D22F00574261 /* AppDelegate.m */,
 				B6372EB11BD4D22F00574261 /* main.m */,
@@ -210,6 +242,22 @@
 		B67D4E871BED4237004CFE38 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B62450DF1BED431E000ACBD3 /* SpotifyAuthenticator.h */,
+				B62450E01BED431E000ACBD3 /* SpotifyAuthenticator.m */,
+				B62450BB1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.h */,
+				B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */,
+				B62450BD1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.h */,
+				B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */,
+				B62450CD1BED431E000ACBD3 /* CreatedServerTableViewController.h */,
+				B62450CE1BED431E000ACBD3 /* CreatedServerTableViewController.m */,
+				B62450CF1BED431E000ACBD3 /* CreateServerTableViewController.h */,
+				B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */,
+				B62450D21BED431E000ACBD3 /* JoinedServerTableViewController.h */,
+				B62450D31BED431E000ACBD3 /* JoinedServerTableViewController.m */,
+				B62450D41BED431E000ACBD3 /* JoinServerTableViewController.h */,
+				B62450D51BED431E000ACBD3 /* JoinServerTableViewController.m */,
+				B62450DD1BED431E000ACBD3 /* SingleVoteTableViewCell.h */,
+				B62450DE1BED431E000ACBD3 /* SingleVoteTableViewCell.m */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -354,10 +402,18 @@
 				B6372EB21BD4D22F00574261 /* main.m in Sources */,
 				B67D4E7E1BED4207004CFE38 /* MusicVoterServer.m in Sources */,
 				B67D4E771BED41EA004CFE38 /* Connection.m in Sources */,
+				B62450E41BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m in Sources */,
 				B67D4E7D1BED4207004CFE38 /* BonjourServer.m in Sources */,
 				B67D4E851BED4224004CFE38 /* BonjourBrowser.m in Sources */,
+				B62450F61BED431E000ACBD3 /* SpotifyAuthenticator.m in Sources */,
+				B62450ED1BED431E000ACBD3 /* CreateServerTableViewController.m in Sources */,
+				B62450F01BED431E000ACBD3 /* JoinServerTableViewController.m in Sources */,
 				B67D4E861BED4224004CFE38 /* ServerConnection.m in Sources */,
+				B62450F51BED431E000ACBD3 /* SingleVoteTableViewCell.m in Sources */,
 				B67D4E781BED41EA004CFE38 /* VoteTrack.m in Sources */,
+				B62450EF1BED431E000ACBD3 /* JoinedServerTableViewController.m in Sources */,
+				B62450E31BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m in Sources */,
+				B62450EC1BED431E000ACBD3 /* CreatedServerTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -498,6 +554,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Music Voter UI/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "MathiasAndMagnus.Music-Voter-UI";
@@ -512,6 +572,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Music Voter UI/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "MathiasAndMagnus.Music-Voter-UI";
