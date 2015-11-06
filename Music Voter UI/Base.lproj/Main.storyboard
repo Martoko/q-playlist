@@ -291,7 +291,7 @@
                             <constraint firstItem="c7h-VQ-Ntf" firstAttribute="top" secondItem="akT-ib-vbL" secondAttribute="bottom" constant="28" id="lB8-dY-Mrz"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="7S0-zp-4ks">
+                    <navigationItem key="navigationItem" id="7S0-zp-4ks">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="hUn-HY-6SY">
                             <connections>
                                 <segue destination="5uu-br-1WB" kind="show" id="QLn-k4-xQ8"/>
@@ -465,7 +465,7 @@
                             <outlet property="delegate" destination="Bvl-Cs-Zo0" id="Q4e-f9-oCX"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="P8N-Ix-dqo">
+                    <navigationItem key="navigationItem" id="P8N-Ix-dqo">
                         <barButtonItem key="rightBarButtonItem" title="Create" id="TAw-Qw-B6D">
                             <connections>
                                 <segue destination="qUp-Ry-hsv" kind="show" id="vsX-1i-Css"/>
@@ -659,7 +659,7 @@
                             <constraint firstItem="wCh-3f-pbU" firstAttribute="top" secondItem="dTb-JG-r5j" secondAttribute="bottom" id="ptF-Mn-KB9"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="Bge-Hx-o5c">
+                    <navigationItem key="navigationItem" id="Bge-Hx-o5c">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uzj-xU-9eY">
                             <connections>
                                 <segue destination="jdJ-vR-QOQ" kind="show" id="C2n-7i-Kiv"/>
