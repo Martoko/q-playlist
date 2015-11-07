@@ -64,11 +64,11 @@
     if ([self.musicVoterServer getIsPlaying]) {
         [self.musicVoterServer pausePlaying];
         
-        [sender setTitle:@">" forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"Play"] forState:UIControlStateNormal];
     } else {
         [self.musicVoterServer continueOrStartPlaying];
         
-        [sender setTitle:@"||" forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:@"Pause"] forState:UIControlStateNormal];
     }
 }
 
@@ -91,10 +91,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CreatedServerCell" forIndexPath:indexPath];
+    VoteTrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VoteTrackCell" forIndexPath:indexPath];
     
     VoteTrack* currentVoteTrack = [self.musicVoterServer.voteTracks objectAtIndex:indexPath.row];
-    cell.textLabel.text = currentVoteTrack.track.name;
+    cell.titleLabel.text = currentVoteTrack.track.name;
     
     return cell;
 }
@@ -160,7 +160,7 @@
 #warning Track changed to null not implemented
     }
     
-    [self.playPauseButton setTitle:@"||" forState:UIControlStateNormal];
+    [self.playPauseButton setImage:[UIImage imageNamed:@"Pause"] forState:UIControlStateNormal];
 }
 
 -(void) setNowPlayingImageFromTrack: (SPTTrack*) track {

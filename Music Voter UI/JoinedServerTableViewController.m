@@ -56,7 +56,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    VoteTrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JoinedServerCell" forIndexPath:indexPath];
+    VoteTrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VoteTrackCell" forIndexPath:indexPath];
     
     VoteTrack* voteTrack = [self.serverConnection.voteTracks objectAtIndex:indexPath.row];
     

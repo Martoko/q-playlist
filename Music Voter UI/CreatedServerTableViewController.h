@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MusicVoterServer.h"
 #import "AddItemToCreatedServerTableViewController.h"
+#import "VoteTrackTableViewCell.h"
 
 @interface CreatedServerTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, AddItemToCreatedServerTableViewControllerDelegate>
 
