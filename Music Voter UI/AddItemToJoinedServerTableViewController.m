@@ -75,6 +75,24 @@
     SPTTrack* track = [self.searchResultsPage.items objectAtIndex:indexPath.row];
     cell.textLabel.text = track.name;
     
+    NSMutableString* subtitleString = [[NSMutableString alloc] init];
+    
+    NSArray* artists = track.artists;
+    for (NSUInteger i = 0; i < artists.count; i++) {
+        SPTPartialArtist* artist = [artists objectAtIndex:i];
+        [subtitleString appendString: artist.name];
+        
+        //if i != lastItem
+        if (i < artists.count-1) {
+            [subtitleString appendString: @" & "];
+        }
+    }
+    
+    [subtitleString appendString:@" - "];
+    [subtitleString appendString:track.album.name];
+    
+    cell.detailTextLabel.text = subtitleString;
+    
     return cell;
 }
 

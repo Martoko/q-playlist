@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *albumLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addItemButton;
+@property (weak, nonatomic) IBOutlet UIView *nowPlayingView;
+@property (weak, nonatomic) IBOutlet UIView *noSongPlayingView;
 
 
 -(void) setNowPlayingImageFromTrack: (SPTPartialTrack*) track;
@@ -43,6 +45,46 @@
     self.tableView.dataSource = nil;
     self.tableView.delegate = nil;
     self.serverConnection.delegate = nil;
+}
+
+- (void) switchToNoSongPlayingUI {
+    if (self.nowPlayingView.hidden == NO) {
+        [UIView transitionWithView:self.nowPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.nowPlayingView.hidden = YES;
+    }
+    
+    if (self.noSongPlayingView.hidden == YES) {
+        [UIView transitionWithView:self.noSongPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.noSongPlayingView.hidden = NO;
+    }
+}
+
+- (void) switchToNowPlayingUI {
+    if (self.nowPlayingView.hidden == YES) {
+        [UIView transitionWithView:self.nowPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.nowPlayingView.hidden = NO;
+    }
+    
+    if (self.noSongPlayingView.hidden == NO) {
+        [UIView transitionWithView:self.noSongPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.noSongPlayingView.hidden = YES;
+    }
 }
 
 #pragma mark - Table view data source
@@ -119,15 +161,19 @@
     self.title = [self.serverConnection getName];
     self.addItemButton.enabled = YES;
     
-    for (UIView* subView in self.view.subviews) {
-        [UIView transitionWithView:subView
-                          duration:0.4
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:NULL
-                        completion:NULL];
-        
-        subView.hidden = NO;
-    }
+    [UIView transitionWithView:self.noSongPlayingView
+                      duration:0.4
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:NULL
+                    completion:NULL];
+    self.noSongPlayingView.hidden = NO;
+    
+    [UIView transitionWithView:self.tableView
+                      duration:0.4
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:NULL
+                    completion:NULL];
+    self.tableView.hidden = NO;
 }
 
 - (void)connectionTerminated {
@@ -159,8 +205,7 @@
         
         [self setNowPlayingImageFromTrack: track];
     } else {
-        NSLog(@"Track changed to null");
-#warning Track changed to null not implemented
+        [self switchToNoSongPlayingUI];
     }
 }
 
@@ -192,6 +237,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.imageView.image = image;
+            [self switchToNowPlayingUI];
         });
         
     });

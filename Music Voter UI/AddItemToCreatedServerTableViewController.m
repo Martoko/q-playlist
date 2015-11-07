@@ -92,9 +92,32 @@
     if ([scope isEqualToString:@"Song"]) {
         SPTPartialTrack* selectedTrack = [self.searchResultsPage.items objectAtIndex:indexPath.row];
         cell.textLabel.text = selectedTrack.name;
+        
+        NSMutableString* subtitleString = [[NSMutableString alloc] init];
+        
+        NSArray* artists = selectedTrack.artists;
+        for (NSUInteger i = 0; i < artists.count; i++) {
+            SPTPartialArtist* artist = [artists objectAtIndex:i];
+            [subtitleString appendString: artist.name];
+            
+            //if i != lastItem
+            if (i < artists.count-1) {
+                [subtitleString appendString: @" & "];
+            }
+        }
+        
+        [subtitleString appendString:@" - "];
+        [subtitleString appendString:selectedTrack.album.name];
+        
+        cell.detailTextLabel.text = subtitleString;
     } else {
         SPTPartialPlaylist* selectedPlaylist = [self.filteredUserPlaylists objectAtIndex:indexPath.row];
         cell.textLabel.text = selectedPlaylist.name;
+        if(selectedPlaylist.trackCount != 1) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%i tracks", selectedPlaylist.trackCount];
+        } else {
+            cell.detailTextLabel.text = @"1 track";
+        }
     }
     
     return cell;

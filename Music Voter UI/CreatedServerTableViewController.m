@@ -19,6 +19,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *playPauseButton;
 @property (weak, nonatomic) IBOutlet UIButton *skipButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addItemButton;
+@property (weak, nonatomic) IBOutlet UIView *noSongPlayingView;
+@property (weak, nonatomic) IBOutlet UIView *nowPlayingView;
+
+
 
 -(void) setNowPlayingImageFromTrack: (SPTTrack*) track;
 
@@ -94,6 +98,46 @@
         
         // Bad practice
         [self.musicVoterServer connection:nil user:userID addedVoteForTrack:selectedVoteTrack.track.uri.absoluteString];
+    }
+}
+
+- (void) switchToNoSongPlayingUI {
+    if (self.nowPlayingView.hidden == NO) {
+        [UIView transitionWithView:self.nowPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.nowPlayingView.hidden = YES;
+    }
+    
+    if (self.noSongPlayingView.hidden == YES) {
+        [UIView transitionWithView:self.noSongPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.noSongPlayingView.hidden = NO;
+    }
+}
+
+- (void) switchToNowPlayingUI {
+    if (self.nowPlayingView.hidden == YES) {
+        [UIView transitionWithView:self.nowPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.nowPlayingView.hidden = NO;
+    }
+    
+    if (self.noSongPlayingView.hidden == NO) {
+        [UIView transitionWithView:self.noSongPlayingView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        self.noSongPlayingView.hidden = YES;
     }
 }
 
@@ -203,8 +247,7 @@
         
         [self setNowPlayingImageFromTrack: newTrack];
     } else {
-        NSLog(@"Track changed to null");
-#warning Track changed to null not implemented
+        [self switchToNoSongPlayingUI];
     }
     
     [self.playPauseButton setImage:[UIImage imageNamed:@"Pause"] forState:UIControlStateNormal];
@@ -238,6 +281,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.nowPlayingImage.image = image;
+            [self switchToNowPlayingUI];
         });
     });
 }
@@ -252,15 +296,19 @@
     self.skipButton.enabled = YES;
     self.addItemButton.enabled = YES;
     
-    for (UIView* subView in self.view.subviews) {
-        [UIView transitionWithView:subView
-                          duration:0.4
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:NULL
-                        completion:NULL];
-        
-        subView.hidden = NO;
-    }
+    [UIView transitionWithView:self.tableView
+                      duration:0.4
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:NULL
+                    completion:NULL];
+    self.tableView.hidden = NO;
+    
+    [UIView transitionWithView:self.noSongPlayingView
+                      duration:0.4
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:NULL
+                    completion:NULL];
+    self.noSongPlayingView.hidden = NO;
     
     [self.tableView reloadData];
 }

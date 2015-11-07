@@ -21,11 +21,11 @@
     
 }
 
-- (void) viewDidAppear:(BOOL)animated {
+- (void) viewWillAppear:(BOOL)animated {
     self.bonjourBrowser = [[BonjourBrowser alloc] init];
     self.bonjourBrowser.delegate = self;
+    [self.tableView reloadData];
 }
-
 
 - (void)viewDidDisappear:(BOOL)animated {
     self.bonjourBrowser.delegate = nil;
