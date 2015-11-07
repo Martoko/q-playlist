@@ -63,12 +63,12 @@
 
 - (void)addVoteForTrack: (VoteTrack*)voteTrack {
     NSString* userID = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    [self.connectionToServer sendUser:userID addedVoteForTrack:[voteTrack.track.uri absoluteString]];
+    [self.connectionToServer sendUser:userID addedVoteForTrack:voteTrack.track.uri.absoluteString];
 }
 
 - (void)removeVoteForTrack: (VoteTrack*)voteTrack {
     NSString* userID = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    [self.connectionToServer sendUser:userID removedVoteForTrack:[voteTrack.track.uri absoluteString]];
+    [self.connectionToServer sendUser:userID removedVoteForTrack:voteTrack.track.uri.absoluteString];
 }
 
 -(void)sortArrayAndSendTrackListChanged {
@@ -87,7 +87,7 @@
 - (void)connection:(Connection *)connection receivedAddTrack: (NSString*) trackURI {
     //check if track is already in list
     for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([[voteTrack.track.uri absoluteString] isEqualToString:trackURI]) {
+        if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
             return;
         }
     }
@@ -97,7 +97,7 @@
         if (error == nil) {
             //check again if track is already in list
             for (VoteTrack* voteTrack in self.voteTracks) {
-                if ([[voteTrack.track.uri absoluteString] isEqualToString:trackURI]) {
+                if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
                     return;
                 }
             }
@@ -118,7 +118,7 @@
 - (void)removeTrack: (NSString*) trackURI {
     VoteTrack* trackToRemove = nil;
     for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([[voteTrack.track.uri absoluteString] isEqualToString: trackURI]) {
+        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
             trackToRemove = voteTrack;
         }
     }
@@ -128,7 +128,7 @@
 
 - (void)connection:(Connection *)connection user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
     for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([[voteTrack.track.uri absoluteString] isEqualToString: trackURI]) {
+        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
             // Makes sure there is no doubles votes
             [voteTrack.remoteVotes removeObject:userID];
             [voteTrack.remoteVotes addObject:userID];
@@ -139,7 +139,7 @@
 
 - (void)connection:(Connection *)connection user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
     for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([[voteTrack.track.uri absoluteString] isEqualToString: trackURI]) {
+        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
             // Makes sure there is no doubles votes
             [voteTrack.remoteVotes removeObject:userID];
         }

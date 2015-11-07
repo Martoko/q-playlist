@@ -98,7 +98,7 @@
     if (self.voteTracks.count > 0) {
         VoteTrack* currentVoteTrack = self.voteTracks.firstObject;
         self.nowPlayingURIs = [[NSArray alloc] initWithObjects:currentVoteTrack.track.uri, nil];
-        [self sendNowPlayingToAllClients:[currentVoteTrack.track.uri absoluteString]];
+        [self sendNowPlayingToAllClients:currentVoteTrack.track.uri.absoluteString];
         [self removeTrack:currentVoteTrack];
         
         [self.player playURIs:self.nowPlayingURIs fromIndex:0 callback:^(NSError *error) {
@@ -183,7 +183,7 @@
 
 -(void)removeTrackFromAllClients:(VoteTrack*) voteTrack {
     for (Connection* connection in self.connections) {
-        [connection sendRemoveTrack:[voteTrack.track.uri absoluteString]];
+        [connection sendRemoveTrack:voteTrack.track.uri.absoluteString];
     }
 }
 
@@ -205,11 +205,11 @@
             //only add if not already in list
             for (VoteTrack* voteTrack in self.voteTracks) {
                 if (self.allowSameSongName) {
-                    if ([[voteTrack.track.uri absoluteString] isEqualToString:trackURI]) {
+                    if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
                         alreadyInList = YES;
                     }
                 } else {
-                    if ([[voteTrack.track.uri absoluteString] isEqualToString:trackURI] || [voteTrack.track.name isEqualToString:newVoteTrack.track.name]) {
+                    if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI] || [voteTrack.track.name isEqualToString:newVoteTrack.track.name]) {
                         alreadyInList = YES;
                     }
                 }
@@ -238,7 +238,7 @@
 //received vote
 - (void)connection:(Connection *)connection user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
     for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([[voteTrack.track.uri absoluteString] isEqualToString: trackURI]) {
+        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
             // Makes sure there is no doubles votes
             [voteTrack.remoteVotes removeObject:userID];
             [voteTrack.remoteVotes addObject:userID];
@@ -257,7 +257,7 @@
 //received remove vote
 - (void)connection:(Connection *)connection user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
     for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([[voteTrack.track.uri absoluteString] isEqualToString: trackURI]) {
+        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
             [voteTrack.remoteVotes removeObject:userID];
         }
     }
@@ -280,9 +280,9 @@
 
 -(void) sendAllTracksAddedToClient: (Connection*) client {
     for (VoteTrack* voteTrack in self.voteTracks) {
-        [client sendAddTrack:[voteTrack.track.uri absoluteString]];
+        [client sendAddTrack:voteTrack.track.uri.absoluteString];
         for (NSString* userID in voteTrack.remoteVotes) {
-            [client sendUser:userID addedVoteForTrack:[voteTrack.track.uri absoluteString]];
+            [client sendUser:userID addedVoteForTrack:voteTrack.track.uri.absoluteString];
         }
     }
 }

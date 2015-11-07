@@ -76,6 +76,28 @@
     [self.musicVoterServer playNextTrack];
 }
 
+- (IBAction)voteButtonPressed:(id)sender {
+    UIButton* button = sender;
+    VoteTrackTableViewCell* cell = (VoteTrackTableViewCell*) button.superview.superview;
+    NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
+    VoteTrack* selectedVoteTrack = [self.musicVoterServer.voteTracks objectAtIndex:indexPath.row];
+    
+    NSString* userID = [[UIDevice currentDevice].identifierForVendor UUIDString];
+    
+    if ([selectedVoteTrack userHasVoted:[[UIDevice currentDevice].identifierForVendor UUIDString]] == YES) {
+        [button setImage:[UIImage imageNamed:@"Star Blank"] forState:UIControlStateNormal];
+        
+        // Bad practice
+        [self.musicVoterServer connection:nil user:userID removedVoteForTrack:selectedVoteTrack.track.uri.absoluteString];
+    } else {
+        [button setImage:[UIImage imageNamed:@"Star Filled"] forState:UIControlStateNormal];
+        
+        // Bad practice
+        [self.musicVoterServer connection:nil user:userID addedVoteForTrack:selectedVoteTrack.track.uri.absoluteString];
+    }
+}
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -93,8 +115,33 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     VoteTrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VoteTrackCell" forIndexPath:indexPath];
     
-    VoteTrack* currentVoteTrack = [self.musicVoterServer.voteTracks objectAtIndex:indexPath.row];
-    cell.titleLabel.text = currentVoteTrack.track.name;
+    VoteTrack* voteTrack = [self.musicVoterServer.voteTracks objectAtIndex:indexPath.row];
+    
+    cell.titleLabel.text = voteTrack.track.name;
+    
+    NSMutableString* subtitleString = [[NSMutableString alloc] init];
+    
+    NSArray* artists = voteTrack.track.artists;
+    for (NSUInteger i = 0; i < artists.count; i++) {
+        SPTPartialArtist* artist = [artists objectAtIndex:i];
+        [subtitleString appendString: artist.name];
+        
+        //if i != lastItem
+        if (i < artists.count-1) {
+            [subtitleString appendString: @" & "];
+        }
+    }
+    
+    [subtitleString appendString:@" - "];
+    [subtitleString appendString:voteTrack.track.album.name];
+    
+    cell.subtitleLabel.text = subtitleString;
+    
+    if ([voteTrack userHasVoted:[[UIDevice currentDevice].identifierForVendor UUIDString]] == YES) {
+        [cell.voteButton setImage:[UIImage imageNamed:@"Star Filled"] forState:UIControlStateNormal];
+    } else {
+        [cell.voteButton setImage:[UIImage imageNamed:@"Star Blank"] forState:UIControlStateNormal];
+    }
     
     return cell;
 }
@@ -204,6 +251,17 @@
     self.playPauseButton.enabled = YES;
     self.skipButton.enabled = YES;
     self.addItemButton.enabled = YES;
+    
+    for (UIView* subView in self.view.subviews) {
+        [UIView transitionWithView:subView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        
+        subView.hidden = NO;
+    }
+    
     [self.tableView reloadData];
 }
 
@@ -211,7 +269,7 @@
 
 - (void)didSelectTrack:(SPTPartialTrack*)track {
     // Bad practice
-    [self.musicVoterServer connection:nil receivedAddTrack:[track.uri absoluteString]];
+    [self.musicVoterServer connection:nil receivedAddTrack:track.uri.absoluteString];
 }
 - (void)didSelectPlaylist:(SPTPartialPlaylist*)playlist {
     [self.musicVoterServer addItemsFromPlaylist:playlist];

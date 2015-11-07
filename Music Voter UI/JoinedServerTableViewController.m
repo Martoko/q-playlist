@@ -62,7 +62,25 @@
     
     cell.titleLabel.text = voteTrack.track.name;
     
-    cell.subtitleLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)voteTrack.remoteVotes.count];
+    NSMutableString* subtitleString = [[NSMutableString alloc] init];
+    
+    NSArray* artists = voteTrack.track.artists;
+    for (NSUInteger i = 0; i < artists.count; i++) {
+        SPTPartialArtist* artist = [artists objectAtIndex:i];
+        [subtitleString appendString: artist.name];
+        
+        //if i != lastItem
+        if (i < artists.count-1) {
+            [subtitleString appendString: @" & "];
+        }
+    }
+    
+    [subtitleString appendString:@" - "];
+    [subtitleString appendString:voteTrack.track.album.name];
+    
+    cell.subtitleLabel.text = subtitleString;
+    
+    //cell.subtitleLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)voteTrack.remoteVotes.count];
     
     if ([voteTrack userHasVoted:[[UIDevice currentDevice].identifierForVendor UUIDString]] == YES) {
         [cell.voteButton setImage:[UIImage imageNamed:@"Star Filled"] forState:UIControlStateNormal];
@@ -100,6 +118,16 @@
 - (void)connectionEstablished {
     self.title = [self.serverConnection getName];
     self.addItemButton.enabled = YES;
+    
+    for (UIView* subView in self.view.subviews) {
+        [UIView transitionWithView:subView
+                          duration:0.4
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:NULL
+                        completion:NULL];
+        
+        subView.hidden = NO;
+    }
 }
 
 - (void)connectionTerminated {
@@ -173,7 +201,7 @@
 #pragma mark - AddItemToJoinedServerTableViewController Delegate
 
 - (void)didSelectTrack:(SPTPartialTrack *)track {
-    [self.serverConnection addTrack:[track.uri absoluteString]];
+    [self.serverConnection addTrack:track.uri.absoluteString];
 }
 
 #pragma mark - Navigation

@@ -50,6 +50,10 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JoinServerCell" forIndexPath:indexPath];
     
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor colorWithRed:(63/255.0) green:(63/255.0) blue:(63/255.0) alpha:1.0];
+    [cell setSelectedBackgroundView:bgColorView];
+    
     NSNetService* server = [self.bonjourBrowser.foundServers objectAtIndex:indexPath.row];
     
     cell.textLabel.text = server.name;

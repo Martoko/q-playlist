@@ -33,6 +33,12 @@
     self.searchController.dimsBackgroundDuringPresentation = NO; // default is YES
     self.searchController.searchBar.delegate = self; // so we can monitor text changes + others
     
+    //style the search bar
+    self.searchController.searchBar.barTintColor = [UIColor colorWithRed:(63/255.0) green:(63/255.0) blue:(63/255.0) alpha:1.0];
+    self.searchController.searchBar.tintColor = [UIColor colorWithRed:(50/255.0) green:(241/255.0) blue:(71/255.0) alpha:1.0];
+    UITextField* searchBarTextField = [self.searchController.searchBar valueForKey:@"searchField"];
+    searchBarTextField.backgroundColor =[UIColor colorWithRed:(163/255.0) green:(165/255.0) blue:(170/255.0) alpha:1.0];
+    
     // Search is now just presenting a view controller. As such, normal view controller
     // presentation semantics apply. Namely that presentation will walk up the view controller
     // hierarchy until it finds the root view controller or one that defines a presentation context.

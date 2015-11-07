@@ -20,7 +20,6 @@
 
 -(void) hideSpotifyLoadIndicator;
 -(void) showSpotifyLoadIndicator;
--(BOOL) isDataOK;
 
 @end
 
@@ -36,7 +35,7 @@
     self.loggedIn = NO;
     self.tableView.delegate = self;
     
-    [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+    [self.loginButton setTitle:@"Sign in" forState:UIControlStateNormal];
     
     [self hideSpotifyLoadIndicator];
     [self.spotifyAuthenticator restoreOldSessionIfValidOtherwiseClearIt];
@@ -62,14 +61,18 @@
 
 - (IBAction)loginButtonPressed:(id)sender {
     if (self.loggedIn) {
-        [self.spotifyAuthenticator logout];
-        
-        self.usernameLabel.text = @"Logged out";
-        [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
-        self.loggedIn = NO;
+        [self logout];
     } else {
         [self.spotifyAuthenticator displayLoginOverlay];
     }
+}
+
+-(void) logout {
+    [self.spotifyAuthenticator logout];
+    
+    self.usernameLabel.text = @"Not signed in";
+    [self.loginButton setTitle:@"Sign in" forState:UIControlStateNormal];
+    self.loggedIn = NO;
 }
 
 #pragma mark - SpotifyAuthenticatorDelegate
@@ -102,17 +105,43 @@
     [self.loginButton setTitle:@"Logout" forState:UIControlStateNormal];
     self.loggedIn = YES;
     [self hideSpotifyLoadIndicator];
-    
-    [self isDataOK];
 }
 
 - (void)spotifyAuthenticator: (SpotifyAuthenticator*)spotifyAuthenticator failedToLoginWithError: (NSError *)error {
-    self.usernameLabel.text = @"Logged out";
-    [self.loginButton setTitle:@"Login" forState:UIControlStateNormal];
+    self.usernameLabel.text = @"Not signed in";
+    [self.loginButton setTitle:@"Sign in" forState:UIControlStateNormal];
     self.loggedIn = NO;
     
-    NSString* message = [NSString stringWithFormat:@"The following error occured while logging in: %@", error.localizedDescription];
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
+    NSString* message = [NSString stringWithFormat:@"The following error occured while signing in: %@", error.localizedDescription];
+    [self createAndDisplayAlertWithTitle:@"Error" andMessage:message];
+}
+
+
+#pragma mark - Navigation
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
+    if ([identifier isEqualToString:@"CreateServerToCreatedServer"]) {
+        if (self.loggedIn == NO) {
+            [self createAndDisplayAlertWithTitle:@"Can't create" andMessage:@"You have to sign in to Spotify to create a server"];
+            return NO;
+        }
+        
+        if (self.user == nil) {
+            assert(NO);
+            return NO;
+        }
+        
+        if (self.user.product != SPTProductPremium) {
+            [self createAndDisplayAlertWithTitle:@"Can't create" andMessage:@"You have to use a premium Spotify account to create a server"];
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
+- (void) createAndDisplayAlertWithTitle: (NSString*) title andMessage: (NSString*) message {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
                                                                    message: message
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
@@ -121,38 +150,6 @@
     
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-
-#pragma mark - Navigation
-
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:@"CreateServerToCreatedServer"]) {
-        return [self isDataOK];
-    }
-    
-    return YES;
-}
-
-- (BOOL)isDataOK {
-    if (self.loggedIn == NO) {
-        self.usernameLabel.superview.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
-        return NO;
-    }
-    
-    if (self.user == nil) {
-        assert(NO);
-        return NO;
-    }
-    
-    if (self.user.product != SPTProductPremium) {
-        self.usernameLabel.superview.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
-        return NO;
-    }
-    
-    self.usernameLabel.superview.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:1];
-    
-    return YES;
 }
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

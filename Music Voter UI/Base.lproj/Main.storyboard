@@ -244,20 +244,20 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I2F-9P-jv6">
-                                                    <rect key="frame" x="16" y="5" width="32" height="20"/>
+                                                    <rect key="frame" x="16" y="5" width="501" height="20"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7WE-Zh-zpF">
-                                                    <rect key="frame" x="16" y="25" width="41" height="14"/>
+                                                    <rect key="frame" x="16" y="25" width="501" height="14"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k6T-Xw-hrg">
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k6T-Xw-hrg">
                                                     <rect key="frame" x="525" y="11" width="20" height="22"/>
                                                     <animations/>
                                                     <state key="normal" image="Star Blank"/>
@@ -271,6 +271,8 @@
                                                 <constraint firstItem="I2F-9P-jv6" firstAttribute="top" secondItem="eu8-cX-UUC" secondAttribute="topMargin" constant="-3" id="Npc-YW-GFo"/>
                                                 <constraint firstItem="7WE-Zh-zpF" firstAttribute="leading" secondItem="eu8-cX-UUC" secondAttribute="leadingMargin" constant="8" id="Ohn-mM-zPX"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="7WE-Zh-zpF" secondAttribute="bottom" constant="-4" id="Su4-Yh-oIB"/>
+                                                <constraint firstItem="k6T-Xw-hrg" firstAttribute="leading" secondItem="7WE-Zh-zpF" secondAttribute="trailing" constant="8" id="cct-54-uLS"/>
+                                                <constraint firstItem="k6T-Xw-hrg" firstAttribute="leading" secondItem="I2F-9P-jv6" secondAttribute="trailing" constant="8" id="eK2-5l-o8o"/>
                                                 <constraint firstItem="I2F-9P-jv6" firstAttribute="leading" secondItem="eu8-cX-UUC" secondAttribute="leadingMargin" constant="8" id="ecC-Dz-VOb"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="k6T-Xw-hrg" secondAttribute="trailing" constant="7" id="ks3-1x-yYm"/>
                                                 <constraint firstItem="k6T-Xw-hrg" firstAttribute="centerY" secondItem="eu8-cX-UUC" secondAttribute="centerY" id="oWJ-nZ-Z6h"/>
@@ -432,7 +434,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O3D-oc-6HM">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Not signed in" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O3D-oc-6HM">
                                                     <rect key="frame" x="16" y="11" width="568" height="21"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -466,7 +468,7 @@
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t3B-cH-tzA">
                                                     <rect key="frame" x="16" y="7" width="568" height="30"/>
                                                     <animations/>
-                                                    <state key="normal" title="Log in"/>
+                                                    <state key="normal" title="Sign in"/>
                                                 </button>
                                             </subviews>
                                             <animations/>
@@ -535,7 +537,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sOO-4M-1MO">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sOO-4M-1MO">
                                 <rect key="frame" x="20" y="92" width="560" height="100"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="018-Xr-JmL">
@@ -635,59 +637,62 @@
                                     <constraint firstItem="Emj-CQ-osS" firstAttribute="leading" secondItem="2j2-2x-s41" secondAttribute="trailing" id="ii8-xI-jNR"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dTb-JG-r5j">
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dTb-JG-r5j">
                                 <rect key="frame" x="20" y="192" width="560" height="408"/>
                                 <animations/>
                                 <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" red="0.098039215690000001" green="0.83921568629999999" blue="0.28235294119999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexColor" red="0.63921568630000003" green="0.64705882349999999" blue="0.66666666669999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VoteTrackCell" id="afw-qW-nWm" customClass="VoteTrackTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VoteTrackCell" id="VwP-No-gC6" customClass="VoteTrackTableViewCell">
                                         <rect key="frame" x="0.0" y="28" width="560" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="afw-qW-nWm" id="4RJ-KQ-QlS">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VwP-No-gC6" id="KWU-H8-yRu">
                                             <rect key="frame" x="0.0" y="0.0" width="560" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u7q-RC-3rZ">
-                                                    <rect key="frame" x="16" y="5" width="32" height="20"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gme-OA-NOG">
+                                                    <rect key="frame" x="16" y="5" width="501" height="20"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BaS-RF-Snb">
-                                                    <rect key="frame" x="16" y="25" width="41" height="14"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqZ-5j-JNO">
+                                                    <rect key="frame" x="16" y="25" width="501" height="14"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iRz-oU-y8H">
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ke5-KQ-aGX">
                                                     <rect key="frame" x="525" y="11" width="20" height="22"/>
                                                     <animations/>
                                                     <state key="normal" image="Star Blank"/>
                                                     <connections>
-                                                        <action selector="voteButtonPressed:" destination="i9z-NC-5ad" eventType="touchUpInside" id="Gir-4j-hdz"/>
+                                                        <action selector="voteButtonPressed:" destination="i9z-NC-5ad" eventType="touchUpInside" id="Qwb-pn-m7H"/>
+                                                        <action selector="voteButtonPressed:" destination="qUp-Ry-hsv" eventType="touchUpInside" id="qaf-Q7-ZCZ"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstItem="BaS-RF-Snb" firstAttribute="leading" secondItem="4RJ-KQ-QlS" secondAttribute="leadingMargin" constant="8" id="94v-Dl-feg"/>
-                                                <constraint firstItem="iRz-oU-y8H" firstAttribute="centerY" secondItem="4RJ-KQ-QlS" secondAttribute="centerY" id="9Am-2O-hsP"/>
-                                                <constraint firstItem="u7q-RC-3rZ" firstAttribute="leading" secondItem="4RJ-KQ-QlS" secondAttribute="leadingMargin" constant="8" id="K9F-pu-V2H"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="BaS-RF-Snb" secondAttribute="bottom" constant="-4" id="Vif-i6-lOz"/>
-                                                <constraint firstItem="u7q-RC-3rZ" firstAttribute="top" secondItem="4RJ-KQ-QlS" secondAttribute="topMargin" constant="-3" id="i4e-0r-tID"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="iRz-oU-y8H" secondAttribute="trailing" constant="7" id="oTw-tb-rf6"/>
+                                                <constraint firstItem="Ke5-KQ-aGX" firstAttribute="centerY" secondItem="KWU-H8-yRu" secondAttribute="centerY" id="TmE-Hp-Aga"/>
+                                                <constraint firstItem="gme-OA-NOG" firstAttribute="top" secondItem="KWU-H8-yRu" secondAttribute="topMargin" constant="-3" id="WOT-jW-pch"/>
+                                                <constraint firstItem="Ke5-KQ-aGX" firstAttribute="leading" secondItem="mqZ-5j-JNO" secondAttribute="trailing" constant="8" id="XJi-tr-g7P"/>
+                                                <constraint firstItem="mqZ-5j-JNO" firstAttribute="leading" secondItem="KWU-H8-yRu" secondAttribute="leadingMargin" constant="8" id="YZo-wj-JCS"/>
+                                                <constraint firstItem="gme-OA-NOG" firstAttribute="leading" secondItem="KWU-H8-yRu" secondAttribute="leadingMargin" constant="8" id="nbF-EF-O39"/>
+                                                <constraint firstItem="Ke5-KQ-aGX" firstAttribute="leading" secondItem="gme-OA-NOG" secondAttribute="trailing" constant="8" id="nlg-Uc-ZJo"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="mqZ-5j-JNO" secondAttribute="bottom" constant="-4" id="nr4-NK-mXK"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Ke5-KQ-aGX" secondAttribute="trailing" constant="7" id="oq6-aX-hUZ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="subtitleLabel" destination="BaS-RF-Snb" id="gfR-3D-yGl"/>
-                                            <outlet property="titleLabel" destination="u7q-RC-3rZ" id="9lA-fo-KhE"/>
-                                            <outlet property="voteButton" destination="iRz-oU-y8H" id="FkO-Kv-hqI"/>
+                                            <outlet property="subtitleLabel" destination="mqZ-5j-JNO" id="fdU-4r-NpN"/>
+                                            <outlet property="titleLabel" destination="gme-OA-NOG" id="sTL-vJ-hBy"/>
+                                            <outlet property="voteButton" destination="Ke5-KQ-aGX" id="N6O-Wb-Tir"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
