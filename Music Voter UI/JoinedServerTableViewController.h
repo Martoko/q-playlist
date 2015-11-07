@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SingleVoteTableViewCell.h"
+#import "VoteTrackTableViewCell.h"
 #import "ServerConnection.h"
 #import "AddItemToJoinedServerTableViewController.h"
 

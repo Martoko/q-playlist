@@ -12,10 +12,6 @@
 
 @property BonjourBrowser* bonjourBrowser;
 
-//DEBUG
-@property MusicVoterServer* musicVoterServer;
-//END DEBUG
-
 @end
 
 @implementation JoinServerTableViewController
@@ -23,16 +19,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.musicVoterServer = [[MusicVoterServer alloc] init];
 }
 
 - (void) viewDidAppear:(BOOL)animated {
     self.bonjourBrowser = [[BonjourBrowser alloc] init];
     self.bonjourBrowser.delegate = self;
-    
-    if (self.musicVoterServer.published == NO) {
-        [self.musicVoterServer publish];
-    }
 }
 
 

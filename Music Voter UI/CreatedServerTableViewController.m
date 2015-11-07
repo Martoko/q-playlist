@@ -12,7 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (weak, nonatomic) IBOutlet UILabel *trackTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *trackLabel;
 @property (weak, nonatomic) IBOutlet UILabel *artistLabel;
 @property (weak, nonatomic) IBOutlet UILabel *albumLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *nowPlayingImage;
@@ -137,7 +137,7 @@
 
 -(void)nowPlayingChanged:(SPTTrack*) newTrack {
     if (newTrack.identifier != NULL) {
-        self.trackTitleLabel.text = newTrack.name;
+        self.trackLabel.text = newTrack.name;
         self.albumLabel.text = newTrack.album.name;
         
         NSMutableString* artistsString = [[NSMutableString alloc] init];

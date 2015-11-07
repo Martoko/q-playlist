@@ -11,7 +11,7 @@
 @interface JoinedServerTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *songLabel;
+@property (weak, nonatomic) IBOutlet UILabel *trackLabel;
 @property (weak, nonatomic) IBOutlet UILabel *artistLabel;
 @property (weak, nonatomic) IBOutlet UILabel *albumLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -56,7 +56,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SingleVoteTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JoinedServerCell" forIndexPath:indexPath];
+    VoteTrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"JoinedServerCell" forIndexPath:indexPath];
     
     VoteTrack* voteTrack = [self.serverConnection.voteTracks objectAtIndex:indexPath.row];
     
@@ -65,9 +65,9 @@
     cell.subtitleLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)voteTrack.remoteVotes.count];
     
     if ([voteTrack userHasVoted:[[UIDevice currentDevice].identifierForVendor UUIDString]] == YES) {
-        [cell.voteButton setTitle:@"[X]" forState:UIControlStateNormal];
+        [cell.voteButton setImage:[UIImage imageNamed:@"Star Filled"] forState:UIControlStateNormal];
     } else {
-        [cell.voteButton setTitle:@"[  ]" forState:UIControlStateNormal];
+        [cell.voteButton setImage:[UIImage imageNamed:@"Star Blank"] forState:UIControlStateNormal];
     }
     
     return cell;
@@ -75,16 +75,16 @@
 
 - (IBAction)voteButtonPressed:(id)sender {
     UIButton* button = sender;
-    SingleVoteTableViewCell* cell = (SingleVoteTableViewCell*) button.superview.superview;
+    VoteTrackTableViewCell* cell = (VoteTrackTableViewCell*) button.superview.superview;
     NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
     VoteTrack* selectedVoteTrack = [self.serverConnection.voteTracks objectAtIndex:indexPath.row];
     
     if ([selectedVoteTrack userHasVoted:[[UIDevice currentDevice].identifierForVendor UUIDString]] == YES) {
-        [button setTitle:@"[  ]" forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"Star Blank"] forState:UIControlStateNormal];
         [self.serverConnection removeVoteForTrack:selectedVoteTrack];
         [selectedVoteTrack.remoteVotes removeObject:[[UIDevice currentDevice].identifierForVendor UUIDString]];
     } else {
-        [button setTitle:@"[X]" forState:UIControlStateNormal];
+        [button setImage:[UIImage imageNamed:@"Star Filled"] forState:UIControlStateNormal];
         [self.serverConnection addVoteForTrack:selectedVoteTrack];
         [selectedVoteTrack.remoteVotes addObject:[[UIDevice currentDevice].identifierForVendor UUIDString]];
     }
@@ -112,7 +112,7 @@
 
 -(void) nowPlayingChangedTo:(SPTPartialTrack *)track {
     if (track.identifier != NULL) {
-        self.songLabel.text = track.name;
+        self.trackLabel.text = track.name;
         self.albumLabel.text = track.album.name;
         
         NSMutableString* artistsString = [[NSMutableString alloc] init];
@@ -182,7 +182,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([segue.identifier  isEqualToString: @"JoinedServerToAddItemSegue"]) {
+    if ([segue.identifier  isEqualToString: @"JoinedServerToAddItem"]) {
         AddItemToJoinedServerTableViewController* newViewController = [segue destinationViewController];
         newViewController.delegate = self;
         

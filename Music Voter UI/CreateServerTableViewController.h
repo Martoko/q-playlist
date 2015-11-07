@@ -12,6 +12,5 @@
 #import "SpotifyAuthenticator.h"
 
 @interface CreateServerTableViewController : UITableViewController <SpotifyAuthenticatorDelegate>
-@property (weak, nonatomic) IBOutlet UITextField *partyName;
 
 @end

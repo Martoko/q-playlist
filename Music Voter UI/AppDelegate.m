@@ -8,6 +8,10 @@
 
 #import "AppDelegate.h"
 
+#define kClientId "fda19ee92aee438ab30ea904f0a539c1"
+#define kCallbackURL "music-voter-login://callback"
+#define kSessionUserDefaultsKey "SpotifySession"
+
 @interface AppDelegate ()
 
 @end
@@ -16,7 +20,13 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // Setup up the global spotify auth options
+    SPTAuth *auth = [SPTAuth defaultInstance];
+    auth.clientID = @kClientId;
+    auth.requestedScopes = @[SPTAuthUserReadPrivateScope, SPTAuthStreamingScope];
+    auth.redirectURL = [NSURL URLWithString:@kCallbackURL];
+    auth.sessionUserDefaultsKey = @kSessionUserDefaultsKey;
+    
     return YES;
 }
 

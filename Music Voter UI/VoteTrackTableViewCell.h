@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SingleVoteTableViewCell : UITableViewCell
+@interface VoteTrackTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIButton *voteButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;

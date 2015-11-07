@@ -6,9 +6,9 @@
 //  Copyright © 2015 Mathias & Magnus. All rights reserved.
 //
 
-#import "SingleVoteTableViewCell.h"
+#import "VoteTrackTableViewCell.h"
 
-@implementation SingleVoteTableViewCell
+@implementation VoteTrackTableViewCell
 
 - (void)awakeFromNib {
     // Initialization code

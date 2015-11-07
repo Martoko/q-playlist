@@ -12,8 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
-@property (weak, nonatomic) IBOutlet UISwitch *allowSameTrackNameSwitch;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spotifyLoadIndicator;
+@property (weak, nonatomic) IBOutlet UITextField *partyNameTextBox;
 @property SpotifyAuthenticator* spotifyAuthenticator;
 @property BOOL loggedIn;
 @property SPTUser* user;
@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     NSString* partyNameDefault = [[[NSArray alloc] initWithObjects:[UIDevice currentDevice].name, @"'s party", nil] componentsJoinedByString:@""];
-    self.partyName.placeholder = partyNameDefault;
+    self.partyNameTextBox.placeholder = partyNameDefault;
     self.spotifyAuthenticator = [[SpotifyAuthenticator alloc] initWithViewController:self];
     self.spotifyAuthenticator.delegate = self;
     self.loggedIn = NO;
@@ -160,14 +160,12 @@
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     if ([segue.identifier  isEqualToString: @"CreateServerToCreatedServer"]) {
-        NSString* name = self.partyName.text;
+        NSString* name = self.partyNameTextBox.text;
         if ([name isEqualToString:@""]) {
-            name = self.partyName.placeholder;
+            name = self.partyNameTextBox.placeholder;
         }
 
         MusicVoterServer* musicVoterServer = [[MusicVoterServer alloc] initWithName:name];
-        
-        musicVoterServer.allowSameSongName = self.allowSameTrackNameSwitch.on;
         
         CreatedServerTableViewController* createdServerViewController = [segue destinationViewController];
         [createdServerViewController setMusicVoterServer:musicVoterServer];
