@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CreatedServerTableViewController.h"
+#import "CreatedServerViewController.h"
 #import "MusicVoterServer.h"
 #import "SpotifyAuthenticator.h"
 

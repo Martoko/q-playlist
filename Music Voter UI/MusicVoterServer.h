@@ -10,34 +10,27 @@
 #import <Spotify/Spotify.h>
 #import "BonjourServer.h"
 #import "VoteTrack.h"
+#import "MusicVoterConnectionProtocol.h"
 
-@interface MusicVoterServer : NSObject <BonjourServerDelegate,SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, ConnectionDelegate>
+@interface MusicVoterServer : NSObject <BonjourServerDelegate,SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, ConnectionDelegate, MusicVoterConnection>
 
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak) id<MusicVoterConnectionDelegate> delegate;
 
 @property (readonly) NSMutableArray* voteTracks;
-@property (readonly) BOOL isPaused;
 -(NSString*) getName;
 @property (readonly) BOOL published;
--(BOOL) getIsPlaying;
 @property BOOL allowSameSongName;
 
 - (id)initWithName: (NSString*) name;
 -(void) publish;
 
+@property (readonly) BOOL isPaused;
+-(BOOL) getIsPlaying;
 -(void) stopPlaying;
 -(void) continueOrStartPlaying;
 -(void) pausePlaying;
 -(void) playNextTrack;
 
 -(void) addItemsFromPlaylist: (SPTPartialPlaylist*) partialPlaylist;
-
-@end
-
-@protocol MusicVoterServerDelegate <NSObject>
-
--(void)nowPlayingChanged:(SPTTrack*) newTrack;
--(void)trackListChanged;
--(void)didPublish;
 
 @end

@@ -37,38 +37,34 @@
     return self.netService.name;
 }
 
-- (void)connectIfNotConnected {
-    if (self.connectionToServer == nil) {
-        [self connect];
-    }
-}
-
 - (void)connect {
-    BOOL success = NO;
+    if (self.connectionToServer == nil) {
+        BOOL success = NO;
     
-    NSInputStream* inputStream;
-    NSOutputStream* outputStream;
+        NSInputStream* inputStream;
+        NSOutputStream* outputStream;
     
-    success = [self.netService getInputStream:&inputStream outputStream:&outputStream];
+        success = [self.netService getInputStream:&inputStream outputStream:&outputStream];
     
-    if (success) {
-        self.connectionToServer = [[Connection alloc] initWithInputStream:inputStream AndOutputStream:outputStream];
-        self.connectionToServer.delegate = self;
+        if (success) {
+            self.connectionToServer = [[Connection alloc] initWithInputStream:inputStream AndOutputStream:outputStream];
+            self.connectionToServer.delegate = self;
+        }
     }
 }
 
-- (void)addTrack: (NSString*)trackURI {
+- (void)sendAddTrack: (NSString*)trackURI {
     [self.connectionToServer sendAddTrack:trackURI];
 }
 
-- (void)addVoteForTrack: (VoteTrack*)voteTrack {
+- (void)sendAddedVoteForTrack: (NSString*)trackURI {
     NSString* userID = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    [self.connectionToServer sendUser:userID addedVoteForTrack:voteTrack.track.uri.absoluteString];
+    [self.connectionToServer sendUser:userID addedVoteForTrack:trackURI];
 }
 
-- (void)removeVoteForTrack: (VoteTrack*)voteTrack {
+- (void)sendRemovedVoteForTrack: (NSString*)trackURI {
     NSString* userID = [[UIDevice currentDevice].identifierForVendor UUIDString];
-    [self.connectionToServer sendUser:userID removedVoteForTrack:voteTrack.track.uri.absoluteString];
+    [self.connectionToServer sendUser:userID removedVoteForTrack:trackURI];
 }
 
 -(void)sortArrayAndSendTrackListChanged {
@@ -84,7 +80,7 @@
 
 #pragma mark - Connection delegate
 
-- (void)connection:(Connection *)connection receivedAddTrack: (NSString*) trackURI {
+- (void)receivedAddTrack: (NSString*) trackURI {
     //check if track is already in list
     for (VoteTrack* voteTrack in self.voteTracks) {
         if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
@@ -93,29 +89,26 @@
     }
     
     NSURL* realTrackURI = [NSURL URLWithString:trackURI];
+    __unsafe_unretained ServerConnection* weakSelf = self;
     [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
         if (error == nil) {
             //check again if track is already in list
-            for (VoteTrack* voteTrack in self.voteTracks) {
+            for (VoteTrack* voteTrack in weakSelf.voteTracks) {
                 if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
                     return;
                 }
             }
             
             VoteTrack* voteTrack = [[VoteTrack alloc] initWithTrack:track];
-            [self.voteTracks addObject:voteTrack];
-            [self sortArrayAndSendTrackListChanged];
+            [weakSelf.voteTracks addObject:voteTrack];
+            [weakSelf sortArrayAndSendTrackListChanged];
         } else {
             NSLog(@"Error getting track %@ ", error.localizedDescription);
         }
     }];
 }
 
-- (void)connection:(Connection *)connection receivedRemoveTrack: (NSString*) trackURI {
-    [self removeTrack:trackURI];
-}
-
-- (void)removeTrack: (NSString*) trackURI {
+- (void)receivedRemoveTrack: (NSString*) trackURI {
     VoteTrack* trackToRemove = nil;
     for (VoteTrack* voteTrack in self.voteTracks) {
         if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
@@ -126,7 +119,7 @@
     [self sortArrayAndSendTrackListChanged];
 }
 
-- (void)connection:(Connection *)connection user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
+- (void)user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
     for (VoteTrack* voteTrack in self.voteTracks) {
         if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
             // Makes sure there is no doubles votes
@@ -137,7 +130,7 @@
     [self sortArrayAndSendTrackListChanged];
 }
 
-- (void)connection:(Connection *)connection user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
+- (void)user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
     for (VoteTrack* voteTrack in self.voteTracks) {
         if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
             // Makes sure there is no doubles votes
@@ -147,17 +140,22 @@
     [self sortArrayAndSendTrackListChanged];
 }
 
-- (void)connection:(Connection *)connection receivedNowPlayingChangedTo: (NSString*) trackURI {
+- (void)receivedNowPlayingChangedTo: (NSString*) trackURI {
     NSURL* realTrackURI = [NSURL URLWithString:trackURI];
     
-    [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
-        if (error == nil) {
-            [self.delegate nowPlayingChangedTo:track];
-        } else {
-            NSLog(@"Error getting track %@ ", error.localizedDescription);
-        }
-    }];
-    [self removeTrack:trackURI];
+    if ([trackURI  isEqualToString: @"none"]) {
+        [self.delegate nowPlayingChangedTo:[[SPTTrack alloc] init]];
+    } else {
+        __unsafe_unretained ServerConnection * weakSelf = self;
+        [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
+            if (error == nil) {
+                [weakSelf.delegate nowPlayingChangedTo:track];
+            } else {
+                NSLog(@"Error getting track %@ ", error.localizedDescription);
+            }
+        }];
+        [self receivedRemoveTrack:trackURI];
+    }
 }
 
 - (void)connectionTerminated:(Connection *)connection {
@@ -165,7 +163,7 @@
 }
 
 - (void)connectionEstablished:(Connection *)connection {
-    [self.delegate connectionEstablished];
+    [self.delegate connectionReady];
 }
 
 @end

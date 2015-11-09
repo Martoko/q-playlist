@@ -11,12 +11,12 @@
 #import <Spotify/Spotify.h>
 #import "Connection.h"
 #import "VoteTrack.h"
+#import "MusicVoterConnectionProtocol.h"
 
+@interface ServerConnection : NSObject <ConnectionDelegate, MusicVoterConnection>
 
-@interface ServerConnection : NSObject <ConnectionDelegate>
-
-@property (nonatomic, weak) id delegate;
-@property NSMutableArray<VoteTrack*>* voteTracks;
+@property (nonatomic, weak) id<MusicVoterConnectionDelegate> delegate;
+@property (readonly) NSMutableArray<VoteTrack*>* voteTracks;
 
 // Hide parameterless init
 -(id)init __attribute__((unavailable("init not available, use initWithNetService")));
@@ -26,20 +26,10 @@
 
 - (NSString*) getName;
 
-- (void)connectIfNotConnected;
 - (void)connect;
 
-- (void)addTrack: (NSString*)trackURI;
-- (void)addVoteForTrack: (VoteTrack*)voteTrack;
-- (void)removeVoteForTrack: (VoteTrack*)voteTrack;
-
-@end
-
-@protocol ServerConnectionDelegate <NSObject>
-
-- (void)connectionEstablished;
-- (void)connectionTerminated;
-- (void)trackListChanged;
-- (void)nowPlayingChangedTo: (SPTPartialTrack*)track;
+- (void)sendAddTrack: (NSString*) trackURI;
+- (void)sendAddedVoteForTrack: (NSString*) trackURI;
+- (void)sendRemovedVoteForTrack: (NSString*) trackURI;
 
 @end

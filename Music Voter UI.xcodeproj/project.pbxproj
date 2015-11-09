@@ -9,15 +9,16 @@
 /* Begin PBXBuildFile section */
 		B62450E31BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */; };
 		B62450E41BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */; };
-		B62450EC1BED431E000ACBD3 /* CreatedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450CE1BED431E000ACBD3 /* CreatedServerTableViewController.m */; };
 		B62450ED1BED431E000ACBD3 /* CreateServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */; };
-		B62450EF1BED431E000ACBD3 /* JoinedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D31BED431E000ACBD3 /* JoinedServerTableViewController.m */; };
 		B62450F01BED431E000ACBD3 /* JoinServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D51BED431E000ACBD3 /* JoinServerTableViewController.m */; };
 		B62450F51BED431E000ACBD3 /* VoteTrackTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450DE1BED431E000ACBD3 /* VoteTrackTableViewCell.m */; };
 		B62450F61BED431E000ACBD3 /* SpotifyAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450E01BED431E000ACBD3 /* SpotifyAuthenticator.m */; };
 		B62450FD1BED43CB000ACBD3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */; };
 		B62450FF1BED43F3000ACBD3 /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62450FE1BED43F3000ACBD3 /* Spotify.framework */; };
 		B62451011BED45BE000ACBD3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62451001BED45BE000ACBD3 /* SystemConfiguration.framework */; };
+		B62451051BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62451041BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.m */; };
+		B62451081BEFAB77000ACBD3 /* JoinedServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62451071BEFAB77000ACBD3 /* JoinedServerViewController.m */; };
+		B624510B1BEFDAB6000ACBD3 /* CreatedServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B624510A1BEFDAB6000ACBD3 /* CreatedServerViewController.m */; };
 		B6372EB21BD4D22F00574261 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6372EB11BD4D22F00574261 /* main.m */; };
 		B6372EB51BD4D22F00574261 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6372EB41BD4D22F00574261 /* AppDelegate.m */; };
 		B6372EBB1BD4D22F00574261 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6372EB91BD4D22F00574261 /* Main.storyboard */; };
@@ -60,12 +61,8 @@
 		B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemToCreatedServerTableViewController.m; sourceTree = "<group>"; };
 		B62450BD1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemToJoinedServerTableViewController.h; sourceTree = "<group>"; };
 		B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemToJoinedServerTableViewController.m; sourceTree = "<group>"; };
-		B62450CD1BED431E000ACBD3 /* CreatedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedServerTableViewController.h; sourceTree = "<group>"; };
-		B62450CE1BED431E000ACBD3 /* CreatedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedServerTableViewController.m; sourceTree = "<group>"; };
 		B62450CF1BED431E000ACBD3 /* CreateServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateServerTableViewController.h; sourceTree = "<group>"; };
 		B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateServerTableViewController.m; sourceTree = "<group>"; };
-		B62450D21BED431E000ACBD3 /* JoinedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinedServerTableViewController.h; sourceTree = "<group>"; };
-		B62450D31BED431E000ACBD3 /* JoinedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinedServerTableViewController.m; sourceTree = "<group>"; };
 		B62450D41BED431E000ACBD3 /* JoinServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinServerTableViewController.h; sourceTree = "<group>"; };
 		B62450D51BED431E000ACBD3 /* JoinServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinServerTableViewController.m; sourceTree = "<group>"; };
 		B62450DD1BED431E000ACBD3 /* VoteTrackTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteTrackTableViewCell.h; sourceTree = "<group>"; };
@@ -75,6 +72,13 @@
 		B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		B62450FE1BED43F3000ACBD3 /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
 		B62451001BED45BE000ACBD3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		B62451021BEF9FCB000ACBD3 /* MusicVoterConnectionProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicVoterConnectionProtocol.h; sourceTree = "<group>"; };
+		B62451031BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicVoterConnectionViewController.h; sourceTree = "<group>"; };
+		B62451041BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicVoterConnectionViewController.m; sourceTree = "<group>"; };
+		B62451061BEFAB77000ACBD3 /* JoinedServerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinedServerViewController.h; sourceTree = "<group>"; };
+		B62451071BEFAB77000ACBD3 /* JoinedServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinedServerViewController.m; sourceTree = "<group>"; };
+		B62451091BEFDAB6000ACBD3 /* CreatedServerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedServerViewController.h; sourceTree = "<group>"; };
+		B624510A1BEFDAB6000ACBD3 /* CreatedServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedServerViewController.m; sourceTree = "<group>"; };
 		B6372EAD1BD4D22F00574261 /* Music Voter UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Music Voter UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6372EB11BD4D22F00574261 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B6372EB31BD4D22F00574261 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -170,6 +174,13 @@
 				B67D4E731BED41EA004CFE38 /* Connection.m */,
 				B67D4E741BED41EA004CFE38 /* VoteTrack.h */,
 				B67D4E751BED41EA004CFE38 /* VoteTrack.m */,
+				B62451021BEF9FCB000ACBD3 /* MusicVoterConnectionProtocol.h */,
+				B62451031BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.h */,
+				B62451041BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.m */,
+				B62451061BEFAB77000ACBD3 /* JoinedServerViewController.h */,
+				B62451071BEFAB77000ACBD3 /* JoinedServerViewController.m */,
+				B62451091BEFDAB6000ACBD3 /* CreatedServerViewController.h */,
+				B624510A1BEFDAB6000ACBD3 /* CreatedServerViewController.m */,
 				B67D4E7F1BED420D004CFE38 /* Serverside */,
 				B67D4E801BED4215004CFE38 /* Clientside */,
 				B67D4E871BED4237004CFE38 /* UI */,
@@ -252,12 +263,8 @@
 				B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */,
 				B62450BD1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.h */,
 				B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */,
-				B62450CD1BED431E000ACBD3 /* CreatedServerTableViewController.h */,
-				B62450CE1BED431E000ACBD3 /* CreatedServerTableViewController.m */,
 				B62450CF1BED431E000ACBD3 /* CreateServerTableViewController.h */,
 				B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */,
-				B62450D21BED431E000ACBD3 /* JoinedServerTableViewController.h */,
-				B62450D31BED431E000ACBD3 /* JoinedServerTableViewController.m */,
 				B62450D41BED431E000ACBD3 /* JoinServerTableViewController.h */,
 				B62450D51BED431E000ACBD3 /* JoinServerTableViewController.m */,
 				B62450DD1BED431E000ACBD3 /* VoteTrackTableViewCell.h */,
@@ -413,11 +420,12 @@
 				B62450ED1BED431E000ACBD3 /* CreateServerTableViewController.m in Sources */,
 				B62450F01BED431E000ACBD3 /* JoinServerTableViewController.m in Sources */,
 				B67D4E861BED4224004CFE38 /* ServerConnection.m in Sources */,
+				B62451081BEFAB77000ACBD3 /* JoinedServerViewController.m in Sources */,
 				B62450F51BED431E000ACBD3 /* VoteTrackTableViewCell.m in Sources */,
+				B62451051BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.m in Sources */,
 				B67D4E781BED41EA004CFE38 /* VoteTrack.m in Sources */,
-				B62450EF1BED431E000ACBD3 /* JoinedServerTableViewController.m in Sources */,
 				B62450E31BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m in Sources */,
-				B62450EC1BED431E000ACBD3 /* CreatedServerTableViewController.m in Sources */,
+				B624510B1BEFDAB6000ACBD3 /* CreatedServerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

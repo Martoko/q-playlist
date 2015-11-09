@@ -28,13 +28,13 @@
 
 @optional
 
-- (void)connection:(Connection *)connection receivedAddTrack: (NSString*) trackURI;
-- (void)connection:(Connection *)connection receivedRemoveTrack: (NSString*) trackURI;
+- (void)receivedAddTrack: (NSString*) trackURI;
+- (void)receivedRemoveTrack: (NSString*) trackURI;
 
-- (void)connection:(Connection *)connection user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI;
-- (void)connection:(Connection *)connection user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI;
+- (void)user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI;
+- (void)user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI;
 
-- (void)connection:(Connection *)connection receivedNowPlayingChangedTo: (NSString*) trackURI;
+- (void)receivedNowPlayingChangedTo: (NSString*) trackURI;
 
 - (void)connectionTerminated:(Connection *)connection;
 - (void)connectionEstablished:(Connection *)connection;

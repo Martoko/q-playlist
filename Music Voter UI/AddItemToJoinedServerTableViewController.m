@@ -127,10 +127,11 @@
 -(void) performSearchAndUpdate: (NSString*)searchQuery {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     self.perfomingSearch = YES;
+    __unsafe_unretained AddItemToJoinedServerTableViewController * weakSelf = self;
     [SPTSearch performSearchWithQuery:searchQuery queryType:SPTQueryTypeTrack accessToken:nil callback:^(NSError *error, id resultsPage) {
         if (error == nil) {
-            self.searchResultsPage = resultsPage;
-            [self.tableView reloadData];
+            weakSelf.searchResultsPage = resultsPage;
+            [weakSelf.tableView reloadData];
         } else {
             NSString* message = [NSString stringWithFormat:@"The following error occured while searching in: %@", error.localizedDescription];
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
@@ -138,12 +139,12 @@
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {}];
+                                                                  handler:nil];
             
             [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:nil];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
         }
-        self.perfomingSearch = NO;
+        weakSelf.perfomingSearch = NO;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     }];
 }

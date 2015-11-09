@@ -1,14 +1,14 @@
 //
-//  JoinedServerTableViewController.m
+//  MusicVoterConnectionViewController.m
 //  Music Voter UI
 //
-//  Created by Martoko on 19/10/15.
+//  Created by Martoko on 08/11/15.
 //  Copyright © 2015 Mathias & Magnus. All rights reserved.
 //
 
-#import "JoinedServerTableViewController.h"
+#import "MusicVoterConnectionViewController.h"
 
-@interface JoinedServerTableViewController ()
+@interface MusicVoterConnectionViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *trackLabel;
@@ -19,20 +19,21 @@
 @property (weak, nonatomic) IBOutlet UIView *nowPlayingView;
 @property (weak, nonatomic) IBOutlet UIView *noSongPlayingView;
 
-
--(void) setNowPlayingImageFromTrack: (SPTPartialTrack*) track;
+- (IBAction)voteButtonPressed:(id)sender;
+- (void)switchToNoSongPlayingUI;
+- (void)switchToNowPlayingUI;
 
 @end
 
-@implementation JoinedServerTableViewController
+@implementation MusicVoterConnectionViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.serverConnection.delegate = self;
-    self.title = @"Joining...";
+    self.musicVoterConnection.delegate = self;
+    //self.title = @"Loading...";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,7 +45,7 @@
 {
     self.tableView.dataSource = nil;
     self.tableView.delegate = nil;
-    self.serverConnection.delegate = nil;
+    self.musicVoterConnection.delegate = nil;
 }
 
 - (void) switchToNoSongPlayingUI {
@@ -94,13 +95,13 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.serverConnection.voteTracks.count;
+    return self.musicVoterConnection.voteTracks.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     VoteTrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VoteTrackCell" forIndexPath:indexPath];
     
-    VoteTrack* voteTrack = [self.serverConnection.voteTracks objectAtIndex:indexPath.row];
+    VoteTrack* voteTrack = [self.musicVoterConnection.voteTracks objectAtIndex:indexPath.row];
     
     cell.titleLabel.text = voteTrack.track.name;
     
@@ -137,37 +138,36 @@
     UIButton* button = sender;
     VoteTrackTableViewCell* cell = (VoteTrackTableViewCell*) button.superview.superview;
     NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
-    VoteTrack* selectedVoteTrack = [self.serverConnection.voteTracks objectAtIndex:indexPath.row];
+    VoteTrack* selectedVoteTrack = [self.musicVoterConnection.voteTracks objectAtIndex:indexPath.row];
+    NSString* ourUserID = [[UIDevice currentDevice].identifierForVendor UUIDString];
     
-    if ([selectedVoteTrack userHasVoted:[[UIDevice currentDevice].identifierForVendor UUIDString]] == YES) {
+    if ([selectedVoteTrack userHasVoted:ourUserID] == YES) {
         [button setImage:[UIImage imageNamed:@"Star Blank"] forState:UIControlStateNormal];
-        [self.serverConnection removeVoteForTrack:selectedVoteTrack];
-        [selectedVoteTrack.remoteVotes removeObject:[[UIDevice currentDevice].identifierForVendor UUIDString]];
+        
+        [selectedVoteTrack.remoteVotes removeObject:ourUserID];
+        [self.musicVoterConnection sendRemovedVoteForTrack:selectedVoteTrack.track.uri.absoluteString];
+        
     } else {
         [button setImage:[UIImage imageNamed:@"Star Filled"] forState:UIControlStateNormal];
-        [self.serverConnection addVoteForTrack:selectedVoteTrack];
-        [selectedVoteTrack.remoteVotes addObject:[[UIDevice currentDevice].identifierForVendor UUIDString]];
+        
+        [selectedVoteTrack.remoteVotes addObject:ourUserID];
+        [self.musicVoterConnection sendAddedVoteForTrack:selectedVoteTrack.track.uri.absoluteString];
     }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self.serverConnection connectIfNotConnected];
+    [self.musicVoterConnection connect];
 }
 
-#pragma mark - ServerConnectionDelegate
+#pragma mark - MusicVoterConnectionDelegate
 
-- (void)connectionEstablished {
-    self.title = [self.serverConnection getName];
+- (void)connectionReady {
+    self.title = self.musicVoterConnection.getName;
+    
+    //Fade UI in, once we're ready
     self.addItemButton.enabled = YES;
-    
-    [UIView transitionWithView:self.noSongPlayingView
-                      duration:0.4
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:NULL
-                    completion:NULL];
-    self.noSongPlayingView.hidden = NO;
-    
+    [self switchToNoSongPlayingUI];
     [UIView transitionWithView:self.tableView
                       duration:0.4
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -175,16 +175,11 @@
                     completion:NULL];
     self.tableView.hidden = NO;
 }
-
-- (void)connectionTerminated {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (void)trackListChanged {
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
--(void) nowPlayingChangedTo:(SPTPartialTrack *)track {
+-(void) nowPlayingChangedTo:(SPTTrack *)track {
     if (track.identifier != NULL) {
         self.trackLabel.text = track.name;
         self.albumLabel.text = track.album.name;
@@ -220,6 +215,7 @@
         NSLog(@"Error imageURL is nil");
         return;
     }
+    __unsafe_unretained MusicVoterConnectionViewController * weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error = nil;
         UIImage *image = nil;
@@ -236,32 +232,15 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.imageView.image = image;
-            [self switchToNowPlayingUI];
+            weakSelf.imageView.image = image;
+            [weakSelf switchToNowPlayingUI];
         });
         
     });
 }
 
-
-#pragma mark - AddItemToJoinedServerTableViewController Delegate
-
-- (void)didSelectTrack:(SPTPartialTrack *)track {
-    [self.serverConnection addTrack:track.uri.absoluteString];
+- (void)connectionTerminated {
+    [self.navigationController popViewControllerAnimated:YES];
 }
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier  isEqualToString: @"JoinedServerToAddItem"]) {
-        AddItemToJoinedServerTableViewController* newViewController = [segue destinationViewController];
-        newViewController.delegate = self;
-        
-    }
-}
-
 
 @end

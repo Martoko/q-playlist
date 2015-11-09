@@ -72,12 +72,12 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier  isEqual: @"JoinServerToJoinedServer"]) {
-        JoinedServerTableViewController* newViewController = [segue destinationViewController];
+        JoinedServerViewController* newViewController = [segue destinationViewController];
         NSIndexPath *selectedPath = [self.tableView indexPathForSelectedRow];
         NSNetService* selectedNetService = [self.bonjourBrowser.foundServers objectAtIndex:selectedPath.row];
         
         
-        newViewController.serverConnection = [[ServerConnection alloc] initWithNetService:selectedNetService];
+        newViewController.musicVoterConnection = [[ServerConnection alloc] initWithNetService:selectedNetService];
     }
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.

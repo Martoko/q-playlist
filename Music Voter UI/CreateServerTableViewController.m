@@ -146,7 +146,7 @@
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
     UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {}];
+                                                          handler:nil];
     
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:nil];
@@ -164,8 +164,8 @@
 
         MusicVoterServer* musicVoterServer = [[MusicVoterServer alloc] initWithName:name];
         
-        CreatedServerTableViewController* createdServerViewController = [segue destinationViewController];
-        [createdServerViewController setMusicVoterServer:musicVoterServer];
+        CreatedServerViewController* createdServerViewController = [segue destinationViewController];
+        createdServerViewController.musicVoterConnection = musicVoterServer;
     }
 }
 

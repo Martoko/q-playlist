@@ -56,19 +56,19 @@
     
     
     if ([commandAndArgs[0] isEqualToString:@"addTrack"]) {
-        [self.delegate connection:self receivedAddTrack:commandAndArgs[1]];
+        [self.delegate receivedAddTrack:commandAndArgs[1]];
         
     } else if ([commandAndArgs[0] isEqualToString:@"removeTrack"]) {
-        [self.delegate connection:self receivedRemoveTrack:commandAndArgs[1]];
+        [self.delegate receivedRemoveTrack:commandAndArgs[1]];
         
     } else if ([commandAndArgs[0] isEqualToString:@"userAddedVoteToTrack"]) {
-        [self.delegate connection:self user:commandAndArgs[1] addedVoteForTrack:commandAndArgs[2]];
+        [self.delegate user:commandAndArgs[1] addedVoteForTrack:commandAndArgs[2]];
         
     } else if ([commandAndArgs[0] isEqualToString:@"userRemovedVoteFromTrack"]) {
-        [self.delegate connection:self user:commandAndArgs[1] removedVoteForTrack:commandAndArgs[2]];
+        [self.delegate user:commandAndArgs[1] removedVoteForTrack:commandAndArgs[2]];
         
     } else if ([commandAndArgs[0] isEqualToString:@"nowPlayingChangedToTrack"]) {
-        [self.delegate connection:self receivedNowPlayingChangedTo:commandAndArgs[1]];
+        [self.delegate receivedNowPlayingChangedTo:commandAndArgs[1]];
         
     } else {
         NSLog(@"Received unknown command: %@", commandAndArgs[0]);

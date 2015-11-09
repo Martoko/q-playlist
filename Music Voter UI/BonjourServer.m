@@ -71,10 +71,11 @@
     // The comment below was in the apple example code
     // I trust that it is still relevant
     /* Due to a bug <rdar://problem/15626440>, this method is called on some unspecified queue rather than the queue associated with the net service (which in this case is the main queue).  Work around this by bouncing to the main queue.*/
+    __unsafe_unretained BonjourServer * weakSelf = self;
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         Connection *newClient = [[Connection alloc] initWithInputStream:inputStream AndOutputStream:outputStream];
         
-        [self.delegate connectionEstablished:newClient];
+        [weakSelf.delegate connectionEstablished:newClient];
     }];
 }
 

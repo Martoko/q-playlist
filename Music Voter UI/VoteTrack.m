@@ -12,7 +12,7 @@
 
 - (id)init
 {
-    return [self initWithTrack:nil];;
+    return [self initWithTrack:nil];
 }
 
 - (id)initWithTrack: (SPTPartialTrack*) track

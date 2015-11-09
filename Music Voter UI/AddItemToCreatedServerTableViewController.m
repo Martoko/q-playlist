@@ -53,10 +53,11 @@
     [super viewDidAppear:animated];
     //update user playlists
     SPTSession* spotifySession = [SPTAuth defaultInstance].session;
+    __unsafe_unretained AddItemToCreatedServerTableViewController* weakSelf = self;
     [SPTPlaylistList playlistsForUserWithSession:spotifySession callback:^(NSError *error, id playlistList) {
         if(error == nil) {
-            self.userPlaylistList = playlistList;
-            [self.tableView reloadData];
+            weakSelf.userPlaylistList = playlistList;
+            [weakSelf.tableView reloadData];
         }
     }];
     [self.searchController setActive:YES];
@@ -65,6 +66,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    self.searchController.delegate = nil;
 }
 
 #pragma mark - Table view data source
@@ -81,7 +87,7 @@
     } else {
         return self.filteredUserPlaylists.count;
     }
-    
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -178,9 +184,10 @@
 - (void)performTrackSearchAndUpdate: (NSString*) searchQuery {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     self.perfomingSearch = YES;
+    __unsafe_unretained AddItemToCreatedServerTableViewController* weakSelf = self;
     [SPTSearch performSearchWithQuery:searchQuery queryType:SPTQueryTypeTrack accessToken:nil callback:^(NSError *error, id resultsPage) {
         if (error == nil) {
-            self.searchResultsPage = resultsPage;
+            weakSelf.searchResultsPage = resultsPage;
         } else {
             NSString* message = [NSString stringWithFormat:@"The following error occured while searching in: %@", error.localizedDescription];
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Error"
@@ -188,14 +195,14 @@
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {}];
+                                                                  handler:nil];
             
             [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:nil];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
         }
-        self.perfomingSearch = NO;
+        weakSelf.perfomingSearch = NO;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        [self.tableView reloadData];
+        [weakSelf.tableView reloadData];
     }];
 }
 
