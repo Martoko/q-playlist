@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addItemButton;
 @property (weak, nonatomic) IBOutlet UIView *nowPlayingView;
 @property (weak, nonatomic) IBOutlet UIView *noSongPlayingView;
+@property NSArray<VoteTrack*>* voteTracks;
 
 - (IBAction)voteButtonPressed:(id)sender;
 - (void)switchToNoSongPlayingUI;
@@ -95,13 +96,15 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.musicVoterConnection.voteTracks.count;
+    
+    return self.voteTracks.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     VoteTrackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"VoteTrackCell" forIndexPath:indexPath];
+    VoteTrack* voteTrack;
     
-    VoteTrack* voteTrack = [self.musicVoterConnection.voteTracks objectAtIndex:indexPath.row];
+    voteTrack = [self.voteTracks objectAtIndex:indexPath.row];
     
     cell.titleLabel.text = voteTrack.track.name;
     
@@ -138,7 +141,7 @@
     UIButton* button = sender;
     VoteTrackTableViewCell* cell = (VoteTrackTableViewCell*) button.superview.superview;
     NSIndexPath* indexPath = [self.tableView indexPathForCell:cell];
-    VoteTrack* selectedVoteTrack = [self.musicVoterConnection.voteTracks objectAtIndex:indexPath.row];
+    VoteTrack* selectedVoteTrack = [self.voteTracks objectAtIndex:indexPath.row];
     NSString* ourUserID = [[UIDevice currentDevice].identifierForVendor UUIDString];
     
     if ([selectedVoteTrack userHasVoted:ourUserID] == YES) {
@@ -157,7 +160,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self.musicVoterConnection connect];
+    [self.musicVoterConnection connectIfNot];
 }
 
 #pragma mark - MusicVoterConnectionDelegate
@@ -175,11 +178,13 @@
                     completion:NULL];
     self.tableView.hidden = NO;
 }
-- (void)trackListChanged {
+- (void)trackListChanged: (NSArray<VoteTrack*>*)voteTracks {
+    self.voteTracks = voteTracks;
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
--(void) nowPlayingChangedTo:(SPTTrack *)track {
+-(void) nowPlayingChangedTo:(SPTPartialTrack *)track {
+    NSLog(@"Now playing changed to: %@", track.identifier);
     if (track.identifier != NULL) {
         self.trackLabel.text = track.name;
         self.albumLabel.text = track.album.name;

@@ -15,8 +15,12 @@
 @property BonjourServer* bonjourServer;
 @property SPTSession* session;
 @property NSArray* nowPlayingURIs;
+@property NSMutableArray* voteTracks;
+@property dispatch_queue_t voteTracksQueue;
 
 @end
+
+#warning what happens, if the user is signed out remotely while the server is running?
 
 @implementation MusicVoterServer
 
@@ -45,7 +49,9 @@
         _nowPlayingURIs = [[NSArray alloc] init];
         _published = NO;
         _connections = [[NSMutableArray alloc] init];
-        _allowSameSongName = NO;
+        _allowSameSongName = YES; // Changing this to NO, means having to handle it in the addVote function
+                                  // it currently only works on trackURI's not names
+        _voteTracksQueue = dispatch_queue_create("hostVoteTracksQueue", DISPATCH_QUEUE_SERIAL);
     }
     
     return self;
@@ -59,6 +65,10 @@
     [self.player logout:nil];
 }
 
+- (NSArray<VoteTrack*>*) getVoteTracks {
+    return [[NSArray alloc] initWithArray:self.voteTracks];
+}
+
 -(NSString*) getName {
     return [self.bonjourServer getName];
 }
@@ -67,11 +77,14 @@
     return self.player.isPlaying;
 }
 
-- (void)connect {
-    [self publish];
+- (void)connectIfNot {
+    if (self.published == NO) {
+        [self publish];
+    }
 }
 
 -(void) publish {
+    NSLog(@"is publishing");
     [self.bonjourServer publish];
     
     SPTAuth* auth = [SPTAuth defaultInstance];
@@ -100,25 +113,73 @@
 }
 
 -(void) playNextTrack {
-    _isPaused = NO;
-    if (self.voteTracks.count > 0) {
-        VoteTrack* currentVoteTrack = self.voteTracks.firstObject;
-        self.nowPlayingURIs = [[NSArray alloc] initWithObjects:currentVoteTrack.track.uri, nil];
-        [self sendNowPlayingToAllClients:currentVoteTrack.track.uri.absoluteString];
-        [self removeTrack:currentVoteTrack];
-        
-        [self.player playURIs:self.nowPlayingURIs fromIndex:0 callback:^(NSError *error) {
-            if (error != nil) {
-                NSLog(@"Error playing song: %@", error.localizedDescription);
-            }
-        }];
-        [self sortArrayAndSendTrackListChanged];
-    }
+    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    
+    dispatch_async(self.voteTracksQueue, ^{
+        _isPaused = NO;
+        if (weakSelf.voteTracks.count > 0) {
+            VoteTrack* currentVoteTrack = weakSelf.voteTracks.firstObject;
+            weakSelf.nowPlayingURIs = [[NSArray alloc] initWithObjects:currentVoteTrack.track.uri, nil];
+            
+            [weakSelf sendNowPlayingToAllClients:currentVoteTrack.track.uri.absoluteString];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.delegate nowPlayingChangedTo:currentVoteTrack.track];
+            });
+            
+            [weakSelf removeTrack:currentVoteTrack];
+            
+            [weakSelf.player playURIs:weakSelf.nowPlayingURIs fromIndex:0 callback:^(NSError *error) {
+                if (error != nil) {
+                    NSLog(@"Error playing song: %@", error.localizedDescription);
+                }
+            }];
+        } else {
+            [weakSelf.player stop:nil];
+            // UI changes must not happen from background queue
+            [weakSelf sendNowPlayingToAllClients:@"none"];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.delegate nowPlayingChangedTo:[[SPTTrack alloc] init]];
+            });
+        }
+    });
 }
 
 -(void)sendNowPlayingToAllClients: (NSString*)trackURI {
     for (Connection* connection in self.connections) {
         [connection sendNowPlayingChangedTo:trackURI];
+    }
+}
+
+-(BOOL) playOrPauseReturnPlaying {
+    if (self.voteTracks.count > 0) {
+        if (_isPaused == NO && [self getIsPlaying]) {
+            [self pausePlaying];
+            return NO;
+        } else if (_isPaused && [self getIsPlaying] == NO) {
+            [self continuePlaying];
+            return YES;
+        } else if (_isPaused == NO && [self getIsPlaying] == NO) {
+            [self playNextTrack];
+            return YES;
+        } else {
+            NSLog(@"Vote track count > 0, and we don't know what to do with play/pause");
+            return [self getIsPlaying];
+        }
+        
+    } else {
+        if (_isPaused == NO && [self getIsPlaying]) {
+            [self pausePlaying];
+            return NO;
+        } else if (_isPaused && [self getIsPlaying] == NO) {
+            [self continuePlaying];
+            return YES;
+        } else if (_isPaused == NO && [self getIsPlaying] == NO) {
+            [self playNextTrack];
+            return NO;
+        } else {
+            NSLog(@"Vote track count == 0, and we don't know what to do with play/pause");
+            return [self getIsPlaying];
+        }
     }
 }
 
@@ -135,34 +196,30 @@
     [self.player setIsPlaying:NO callback:nil];
 }
 
--(void) continueOrStartPlaying {
-    if (self.isPaused) {
-        [self.player setIsPlaying:YES callback:nil];
-    } else {
-        [self playNextTrack];
-    }
+-(void) continuePlaying {
     _isPaused = NO;
+    [self.player setIsPlaying:YES callback:nil];
 }
 
 -(void) addItemsFromPlaylist: (SPTPartialPlaylist*) partialPlaylist {
     __unsafe_unretained MusicVoterServer* weakSelf = self;
     [SPTPlaylistSnapshot playlistWithURI:partialPlaylist.uri session:self.session callback:^(NSError *error, id object) {
         if(error == nil) {
-            SPTPlaylistSnapshot* fullPlaylist = object;
-            SPTListPage* playlistPartialTracks = fullPlaylist.firstTrackPage;
-            for (NSUInteger i = 0; i < playlistPartialTracks.items.count ; i++) {
-                VoteTrack* newVoteTrack = [[VoteTrack alloc] initWithTrack:[playlistPartialTracks.items objectAtIndex:i]];
-                [weakSelf.voteTracks addObject:newVoteTrack];
-                [weakSelf sendTrackAddedToAllClients:newVoteTrack.track.uri.absoluteString];
-            }
+                SPTPlaylistSnapshot* fullPlaylist = object;
+                SPTListPage* playlistPartialTracks = fullPlaylist.firstTrackPage;
+                for (NSUInteger i = 0; i < playlistPartialTracks.items.count ; i++) {
+                    SPTTrack* newTrack = [playlistPartialTracks.items objectAtIndex:i];
+                    [weakSelf addTrack:newTrack];
+                }
         }
-        [weakSelf sortArrayAndSendTrackListChanged];
-    } ];
+    }];
 }
 
 -(void)sortArrayAndSendTrackListChanged {
     [self sortArray];
-    [self.delegate trackListChanged];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate trackListChanged: [self getVoteTracks]];
+    });
 }
 
 -(void)sortArray {
@@ -185,8 +242,12 @@
 }
 
 -(void) removeTrack: (VoteTrack*) voteTrack {
-    [self removeTrackFromAllClients: voteTrack];
-    [self.voteTracks removeObject:voteTrack];
+    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        [weakSelf removeTrackFromAllClients: voteTrack];
+        [weakSelf.voteTracks removeObject:voteTrack];
+        [weakSelf sortArrayAndSendTrackListChanged];
+    });
 }
 
 -(void)removeTrackFromAllClients:(VoteTrack*) voteTrack {
@@ -211,33 +272,40 @@
     __unsafe_unretained MusicVoterServer* weakSelf = self;
     [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
         if (error == nil) {
-            VoteTrack* newVoteTrack = [[VoteTrack alloc] initWithTrack:track];
-            
-            BOOL alreadyInList = NO;
-            
-            //only add if not already in list
-            for (VoteTrack* voteTrack in weakSelf.voteTracks) {
-                if (weakSelf.allowSameSongName) {
-                    if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
-                        alreadyInList = YES;
-                    }
-                } else {
-                    if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI] || [voteTrack.track.name isEqualToString:newVoteTrack.track.name]) {
-                        alreadyInList = YES;
-                    }
-                }
-                
-            }
-            
-            if (alreadyInList == NO) {
-                [weakSelf.voteTracks addObject:newVoteTrack];
-                [weakSelf sortArrayAndSendTrackListChanged];
-                [weakSelf sendTrackAddedToAllClients: trackURI];
-            }
+            [weakSelf addTrack:track];
         } else {
             NSLog(@"Error getting track %@ ", error.localizedDescription);
         }
     }];
+}
+
+- (void)addTrack: (SPTTrack*) track {
+     __unsafe_unretained MusicVoterServer* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        VoteTrack* newVoteTrack = [[VoteTrack alloc] initWithTrack:track];
+        
+        BOOL alreadyInList = NO;
+        
+        //only add if not already in list
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if (weakSelf.allowSameSongName) {
+                if ([voteTrack.track.uri.absoluteString isEqualToString:track.uri.absoluteString]) {
+                    alreadyInList = YES;
+                }
+            } else {
+                if ([voteTrack.track.uri.absoluteString isEqualToString:track.uri.absoluteString] || [voteTrack.track.name isEqualToString:newVoteTrack.track.name]) {
+                    alreadyInList = YES;
+                }
+            }
+            
+        }
+        
+        if (alreadyInList == NO) {
+            [weakSelf.voteTracks addObject:newVoteTrack];
+            [weakSelf sortArrayAndSendTrackListChanged];
+            [weakSelf sendTrackAddedToAllClients: track.uri.absoluteString];
+        }
+    });
 }
 
 -(void) sendTrackAddedToAllClients: (NSString*) trackURI {
@@ -255,15 +323,36 @@
 }
 
 - (void)user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
-    for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
-            // Makes sure there is no doubles votes
-            [voteTrack.remoteVotes removeObject:userID];
-            [voteTrack.remoteVotes addObject:userID];
+    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        BOOL alreadyInList = NO;
+        VoteTrack* chosenVoteTrack;
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
+                chosenVoteTrack = voteTrack;
+                alreadyInList = YES;
+            }
         }
-    }
-    [self sendVoteAddedToAllClients:userID track:trackURI];
-    [self sortArrayAndSendTrackListChanged];
+        
+        if (alreadyInList) {
+            // Makes sure there is no doubles votes
+            [chosenVoteTrack.remoteVotes removeObject:userID];
+            [chosenVoteTrack.remoteVotes addObject:userID];
+            [weakSelf sendVoteAddedToAllClients:userID track:trackURI];
+            [weakSelf sortArrayAndSendTrackListChanged];
+            
+        } else if (alreadyInList == NO) {
+            NSURL* realTrackURI = [NSURL URLWithString:trackURI];
+            [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
+                if (error == nil) {
+                    [weakSelf addTrack:track];
+                    [weakSelf user:userID addedVoteForTrack:trackURI];
+                } else {
+                    NSLog(@"Error getting track %@ ", error.localizedDescription);
+                }
+            }];
+        }
+    });
 }
 
 -(void)sendVoteAddedToAllClients: (NSString*)userID track: (NSString*) trackURI {
@@ -279,13 +368,16 @@
 }
 
 - (void)user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
-    for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
-            [voteTrack.remoteVotes removeObject:userID];
+    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
+                [voteTrack.remoteVotes removeObject:userID];
+            }
         }
-    }
-    [self sendVoteRemovedToAllClients:userID track:trackURI];
-    [self sortArrayAndSendTrackListChanged];
+        [weakSelf sendVoteRemovedToAllClients:userID track:trackURI];
+        [weakSelf sortArrayAndSendTrackListChanged];
+    });
 }
 
 -(void)sendVoteRemovedToAllClients: (NSString*)userID track: (NSString*) trackURI {
@@ -307,35 +399,43 @@
 }
 
 -(void) sendAllTracksAddedToClient: (Connection*) client {
-    for (VoteTrack* voteTrack in self.voteTracks) {
-        [client sendAddTrack:voteTrack.track.uri.absoluteString];
-        for (NSString* userID in voteTrack.remoteVotes) {
-            [client sendUser:userID addedVoteForTrack:voteTrack.track.uri.absoluteString];
+    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            [client sendAddTrack:voteTrack.track.uri.absoluteString];
+            for (NSString* userID in voteTrack.remoteVotes) {
+                [client sendUser:userID addedVoteForTrack:voteTrack.track.uri.absoluteString];
+            }
         }
-    }
+    });
 }
 
 #pragma mark - Spotify player delegate
 -(void)audioStreaming:(SPTAudioStreamingController *)audioStreaming didChangeToTrack:(NSDictionary *)trackMetadata {
+    __unsafe_unretained MusicVoterServer* weakSelf = self;
     
     if (self.player.currentTrackURI.absoluteString == nil) {
-        if (self.voteTracks.count > 0) {
-            [self playNextTrack];
-        } else {
-            [self sendNowPlayingToAllClients:@"none"];
-            [self.delegate nowPlayingChangedTo:[[SPTTrack alloc] init]];
-        }
+        dispatch_async(self.voteTracksQueue, ^{
+            if (weakSelf.voteTracks.count > 0) {
+                [weakSelf playNextTrack];
+            } else {
+                [weakSelf sendNowPlayingToAllClients:@"none"];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakSelf.delegate nowPlayingChangedTo:[[SPTTrack alloc] init]];
+                });
+            }
+        });
         
     } else {
-        __unsafe_unretained MusicVoterServer* weakSelf = self;
         [SPTTrack trackWithURI:self.player.currentTrackURI session: self.session callback:^(NSError *error, id object) {
             if (error == nil) {
                 // only send if we are still playing
                 // Stops the sending of an extra bogus call, when the player stops
                 if ([weakSelf getIsPlaying]) {
                     SPTTrack* newTrack = object;
-                    [weakSelf.delegate nowPlayingChangedTo:newTrack];
-                    [weakSelf sortArrayAndSendTrackListChanged];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.delegate nowPlayingChangedTo:newTrack];
+                    });
                 }
             } else {
                 NSLog(@"Error playing track %@", error.localizedDescription);

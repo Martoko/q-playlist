@@ -26,8 +26,6 @@
 
 - (NSString*) getName;
 
-- (void)connect;
-
 - (void)sendAddTrack: (NSString*) trackURI;
 - (void)sendAddedVoteForTrack: (NSString*) trackURI;
 - (void)sendRemovedVoteForTrack: (NSString*) trackURI;

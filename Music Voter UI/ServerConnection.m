@@ -12,6 +12,8 @@
 
 @property NSNetService* netService;
 @property Connection* connectionToServer;
+@property NSMutableArray* voteTracks;
+@property dispatch_queue_t voteTracksQueue;
 
 @end
 
@@ -24,6 +26,7 @@
         _voteTracks = [[NSMutableArray alloc] init];
         _netService = netService;
         _connectionToServer = nil;
+        _voteTracksQueue = dispatch_queue_create("joinVoteTracksQueue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -37,7 +40,11 @@
     return self.netService.name;
 }
 
-- (void)connect {
+- (NSArray<VoteTrack*>*) getVoteTracks {
+    return [[NSArray alloc] initWithArray:self.voteTracks];
+}
+
+- (void)connectIfNot {
     if (self.connectionToServer == nil) {
         BOOL success = NO;
     
@@ -69,7 +76,9 @@
 
 -(void)sortArrayAndSendTrackListChanged {
     [self sortArray];
-    [self.delegate trackListChanged];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.delegate trackListChanged:[self getVoteTracks]];
+    });
 }
 
 -(void)sortArray {
@@ -81,63 +90,79 @@
 #pragma mark - Connection delegate
 
 - (void)receivedAddTrack: (NSString*) trackURI {
-    //check if track is already in list
-    for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
-            return;
-        }
-    }
-    
-    NSURL* realTrackURI = [NSURL URLWithString:trackURI];
     __unsafe_unretained ServerConnection* weakSelf = self;
-    [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
-        if (error == nil) {
-            //check again if track is already in list
-            for (VoteTrack* voteTrack in weakSelf.voteTracks) {
-                if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
-                    return;
-                }
+    dispatch_async(self.voteTracksQueue, ^{
+        //check if track is already in list
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
+                return;
             }
-            
-            VoteTrack* voteTrack = [[VoteTrack alloc] initWithTrack:track];
-            [weakSelf.voteTracks addObject:voteTrack];
-            [weakSelf sortArrayAndSendTrackListChanged];
-        } else {
-            NSLog(@"Error getting track %@ ", error.localizedDescription);
         }
-    }];
+    
+        NSURL* realTrackURI = [NSURL URLWithString:trackURI];
+        [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
+            if (error == nil) {
+                dispatch_async(weakSelf.voteTracksQueue, ^{
+                    //check again if track is already in list
+                    for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+                        if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
+                            return;
+                        }
+                    }
+            
+                    VoteTrack* voteTrack = [[VoteTrack alloc] initWithTrack:track];
+                    [weakSelf.voteTracks addObject:voteTrack];
+                    [weakSelf sortArrayAndSendTrackListChanged];
+                });
+                
+            } else {
+                NSLog(@"Error getting track %@ ", error.localizedDescription);
+            }
+        }];
+    });
+    
 }
 
 - (void)receivedRemoveTrack: (NSString*) trackURI {
-    VoteTrack* trackToRemove = nil;
-    for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
-            trackToRemove = voteTrack;
+    __unsafe_unretained ServerConnection* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        VoteTrack* trackToRemove = nil;
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
+                trackToRemove = voteTrack;
+            }
         }
-    }
-    [self.voteTracks removeObject:trackToRemove];
-    [self sortArrayAndSendTrackListChanged];
+        [weakSelf.voteTracks removeObject:trackToRemove];
+        [weakSelf sortArrayAndSendTrackListChanged];
+    });
+    
 }
 
 - (void)user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
-    for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
-            // Makes sure there is no doubles votes
-            [voteTrack.remoteVotes removeObject:userID];
-            [voteTrack.remoteVotes addObject:userID];
+    __unsafe_unretained ServerConnection* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
+                // Makes sure there is no doubles votes
+                [voteTrack.remoteVotes removeObject:userID];
+                [voteTrack.remoteVotes addObject:userID];
+            }
         }
-    }
-    [self sortArrayAndSendTrackListChanged];
+        [weakSelf sortArrayAndSendTrackListChanged];
+    });
 }
 
 - (void)user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
-    for (VoteTrack* voteTrack in self.voteTracks) {
-        if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
-            // Makes sure there is no doubles votes
-            [voteTrack.remoteVotes removeObject:userID];
+    __unsafe_unretained ServerConnection* weakSelf = self;
+    dispatch_async(self.voteTracksQueue, ^{
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
+                [voteTrack.remoteVotes removeObject:userID];
+            }
         }
-    }
-    [self sortArrayAndSendTrackListChanged];
+        [weakSelf sortArrayAndSendTrackListChanged];
+    });
+    
 }
 
 - (void)receivedNowPlayingChangedTo: (NSString*) trackURI {

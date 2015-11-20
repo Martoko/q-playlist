@@ -12,8 +12,8 @@
 @protocol MusicVoterConnectionDelegate <NSObject>
 
 - (void)connectionReady;
-- (void)trackListChanged;
-- (void)nowPlayingChangedTo: (SPTTrack*)track;
+- (void)trackListChanged: (NSArray<VoteTrack*>*)voteTracks;
+- (void)nowPlayingChangedTo: (SPTPartialTrack*)track;
 
 @optional
 - (void)connectionTerminated;
@@ -22,7 +22,7 @@
 
 @protocol MusicVoterConnection <NSObject>
 
-- (void)connect;
+- (void)connectIfNot;
 - (NSString*) getName;
 
 - (void)sendAddTrack: (NSString*) trackURI;
@@ -30,15 +30,16 @@
 - (void)sendRemovedVoteForTrack: (NSString*) trackURI;
 
 @property (nonatomic, weak) id<MusicVoterConnectionDelegate> delegate;
-@property (readonly) NSMutableArray<VoteTrack*>* voteTracks;
+- (NSArray<VoteTrack*>*) getVoteTracks;
 
 @optional
 -(void) addItemsFromPlaylist: (SPTPartialPlaylist*) partialPlaylist;
 
 @property (readonly) BOOL isPaused;
 -(BOOL) getIsPlaying;
+-(BOOL) playOrPauseReturnPlaying;
 -(void) stopPlaying;
--(void) continueOrStartPlaying;
+-(void) continuePlaying;
 -(void) pausePlaying;
 -(void) playNextTrack;
 

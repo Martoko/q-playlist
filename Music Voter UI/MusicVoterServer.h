@@ -16,7 +16,6 @@
 
 @property (nonatomic, weak) id<MusicVoterConnectionDelegate> delegate;
 
-@property (readonly) NSMutableArray* voteTracks;
 -(NSString*) getName;
 @property (readonly) BOOL published;
 @property BOOL allowSameSongName;
@@ -27,7 +26,7 @@
 @property (readonly) BOOL isPaused;
 -(BOOL) getIsPlaying;
 -(void) stopPlaying;
--(void) continueOrStartPlaying;
+-(void) continuePlaying;
 -(void) pausePlaying;
 -(void) playNextTrack;
 

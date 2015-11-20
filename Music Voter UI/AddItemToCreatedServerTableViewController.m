@@ -120,7 +120,7 @@
         SPTPartialPlaylist* selectedPlaylist = [self.filteredUserPlaylists objectAtIndex:indexPath.row];
         cell.textLabel.text = selectedPlaylist.name;
         if(selectedPlaylist.trackCount != 1) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%i tracks", selectedPlaylist.trackCount];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu tracks", (unsigned long)selectedPlaylist.trackCount];
         } else {
             cell.detailTextLabel.text = @"1 track";
         }
@@ -170,7 +170,7 @@
     NSString* scope = [self.searchController.searchBar.scopeButtonTitles objectAtIndex:self.searchController.searchBar.selectedScopeButtonIndex];
     
     if ([scope isEqualToString:@"Song"]) {
-        if (self.perfomingSearch == NO && strippedString.length >= 3) {
+        if (self.perfomingSearch == NO && strippedString.length >= 2) {
             [self performTrackSearchAndUpdate:strippedString];
         } else {
             [self.tableView reloadData];

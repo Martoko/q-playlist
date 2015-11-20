@@ -23,6 +23,8 @@
 
 @end
 
+//18:43:56.694 ERROR:    [0x38a77000] AVAudioSession.mm:697: -[AVAudioSession setActive:withOptions:error:]: Deactivating an audio session that has running I/O. All I/O should be stopped or paused prior to deactivating the audio session.
+
 @implementation CreatedServerViewController
 
 - (void)viewDidLoad {
@@ -31,16 +33,10 @@
 }
 
 - (IBAction)playPauseButtonPressed:(id)sender {
-    if ([self.musicVoterConnection getIsPlaying]) {
-        [self.musicVoterConnection pausePlaying];
-        
-        [sender setImage:[UIImage imageNamed:@"Play"] forState:UIControlStateNormal];
-    
-    //only continue(and assume we succeded) to play, if there's something to play
-    } else if(self.musicVoterConnection.voteTracks.count > 0) {
-        [self.musicVoterConnection continueOrStartPlaying];
-        
+    if([self.musicVoterConnection playOrPauseReturnPlaying]) {
         [sender setImage:[UIImage imageNamed:@"Pause"] forState:UIControlStateNormal];
+    } else {
+        [sender setImage:[UIImage imageNamed:@"Play"] forState:UIControlStateNormal];
     }
 }
 
@@ -73,7 +69,7 @@
 #pragma mark - AddItemToCreatedServerTableViewControllerDelegate
 
 - (void)didSelectTrack:(SPTPartialTrack*)track {
-    [self.musicVoterConnection sendAddTrack:track.uri.absoluteString];
+    [self.musicVoterConnection sendAddedVoteForTrack:track.uri.absoluteString];
 }
 - (void)didSelectPlaylist:(SPTPartialPlaylist*)playlist {
     [self.musicVoterConnection addItemsFromPlaylist:playlist];

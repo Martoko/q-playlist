@@ -32,7 +32,7 @@
 #pragma mark - AddItemToJoinedServerTableViewController Delegate
 
 - (void)didSelectTrack:(SPTPartialTrack *)track {
-    [self.musicVoterConnection sendAddTrack:track.uri.absoluteString];
+    [self.musicVoterConnection sendAddedVoteForTrack:track.uri.absoluteString];
 }
 
 #pragma mark - Navigation

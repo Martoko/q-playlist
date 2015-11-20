@@ -17,10 +17,10 @@
 @property NSMutableString* lastReadMessage;
 @property int openStreams;
 
-@property NSMutableArray* outputBuffer;
+@property NSMutableArray<NSNumber *>* outputBuffer;
+@property dispatch_queue_t bufferQueue;
 
-- (void) sendCharacter: (char) character;
-- (void) sendByte: (uint8_t)byte;
+- (BOOL) sendByteAndSucceded: (uint8_t)byte;
 - (void) startStreams;
 - (void) stopStreams;
 
@@ -43,6 +43,7 @@
         _outputStream = outputStream;
         _openStreams = 0;
         _outputBuffer = [[NSMutableArray alloc] init];
+        _bufferQueue = dispatch_queue_create("bufferQueue", DISPATCH_QUEUE_SERIAL);
         _lastReadMessage = [[NSMutableString alloc] init];
         [self startStreams];
     }
@@ -79,25 +80,24 @@
 }
 
 - (void) sendMessage:(NSString *)string {
-    const char* cString = [string UTF8String];
-    for (size_t i = 0; i < strlen(cString); i++) {
-        [self sendCharacter: cString[i]];
-    }
-    [self sendCharacter: self.separator];
+    dispatch_async(self.bufferQueue, ^{
+        const char* cString = [string UTF8String];
+        for (size_t i = 0; i < strlen(cString); i++) {
+            NSNumber* byteNumber = [[NSNumber alloc] initWithUnsignedInt:(uint8_t)cString[i]];
+            [self.outputBuffer addObject:byteNumber];
+        }
+        NSNumber* byteNumber = [[NSNumber alloc] initWithUnsignedInt:(uint8_t)self.separator];
+        [self.outputBuffer addObject:byteNumber];
+        
+        [self tryToSendFromBuffer];
+    });
 }
 
-- (void) sendCharacter:(char)character {
-    NSNumber* byteNumber = [[NSNumber alloc] initWithUnsignedInt:(uint8_t)character];
-    [self.outputBuffer addObject:byteNumber];
-    [self tryToSendFromBuffer];
-}
-
-- (void)sendByte:(uint8_t)byte
+- (BOOL)sendByteAndSucceded:(uint8_t)byte
 {
     // Only write to the stream if it has space available, otherwise we might block.
-    // In a real app you have to handle this case properly
     
-    if ( [self.outputStream hasSpaceAvailable]) {
+    if ( [self.outputStream hasSpaceAvailable] ) {
         NSInteger   bytesWritten;
         
         bytesWritten = [self.outputStream write:&byte maxLength:sizeof(byte)];
@@ -105,20 +105,45 @@
         if (bytesWritten != sizeof(byte)) {
             [self stopStreams];
         }
+        
+        return YES;
     } else {
-        //Should never happen
-        assert(NO);
+        return NO;
     }
 }
 
+- (BOOL)sendBytesAndSucceded:(uint8_t*)bytes WithLength: (NSInteger) length {
+    if( [self.outputStream hasSpaceAvailable] ) {
+        NSInteger bytesWritten = [self.outputStream write:bytes maxLength:sizeof(bytes)];
+        
+        if (bytesWritten != length) {
+            [self stopStreams];
+        }
+        
+        return YES;
+        
+    } else {
+        return NO;
+    }
+    
+}
+
 - (void)tryToSendFromBuffer {
+    while ([self.outputStream hasSpaceAvailable] && self.outputBuffer.count > 0) {
+    
     //Only send if buffer has space and there is something in our manual buffer
     while ([self.outputStream hasSpaceAvailable] && self.outputBuffer.count > 0) {
         NSNumber* latestByte = self.outputBuffer.firstObject;
-        [self.outputBuffer removeObjectAtIndex:0];
         
         uint8_t byte = [latestByte unsignedIntValue];
-        [self sendByte:byte];
+        BOOL didSendByte = [self sendByteAndSucceded:byte];
+        if (didSendByte) {
+            [self.outputBuffer removeObjectAtIndex:0];
+        }
+//        while (didSendByte == NO) {
+//            didSendByte = [self sendByteAndSucceded:byte];
+//        }
+    }
     }
 }
 
@@ -133,25 +158,31 @@
         } break;
             
         case NSStreamEventHasBytesAvailable: {
-            uint8_t     b;
-            NSInteger   bytesRead;
-            
-            bytesRead = [self.inputStream read:&b maxLength:sizeof(uint8_t)];
+            uint8_t buffer[1024];
+            unsigned int bytesRead;
+        
+            bytesRead = [self.inputStream read:buffer maxLength:1024];
             if (bytesRead <= 0) {
                 // Do nothing; we'll handle EOF and error in the
                 // NSStreamEventEndEncountered and NSStreamEventErrorOccurred case,
                 // respectively.
             } else {
-                char character = (char)b;
-                if(character == self.separator) {
-                    [self.delegate connection:self receivedMessage:self.lastReadMessage];
-                    [self.lastReadMessage setString:@""];
+                NSMutableString* readString = [[NSMutableString alloc] initWithBytes:buffer length:bytesRead encoding:NSUTF8StringEncoding];
+                
+                // UTF decode can leave an empty string, typically if it is garbage
+                if (readString) {
+                    NSRange foundSeparator = [readString rangeOfString:[NSString stringWithFormat:@"%c", self.separator]];
                     
-                } else if (character == '\r' || character == '\n') {
-                    // Newlines are ignored so we can telnet into it
+                    while (foundSeparator.location != NSNotFound) {
+                        [self.lastReadMessage appendString: [readString substringToIndex:foundSeparator.location]];
+                        [readString deleteCharactersInRange:NSMakeRange(0, foundSeparator.location+1)];
+                        [self.delegate connection:self receivedMessage:self.lastReadMessage];
+                        [self.lastReadMessage setString:@""];
+                        
+                        foundSeparator = [readString rangeOfString:[NSString stringWithFormat:@"%c", self.separator]];
+                    }
                     
-                } else {
-                    [self.lastReadMessage appendFormat:@"%c", character];
+                    [self.lastReadMessage appendString:readString];
                 }
             }
         } break;
@@ -162,7 +193,10 @@
         } break;
         
         case NSStreamEventHasSpaceAvailable: {
-            [self tryToSendFromBuffer];
+            dispatch_async(self.bufferQueue, ^{
+                [self tryToSendFromBuffer];
+                
+            });
         } break;
         case NSStreamEventNone: break;
     }
