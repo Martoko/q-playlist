@@ -159,7 +159,7 @@
             
         case NSStreamEventHasBytesAvailable: {
             uint8_t buffer[1024];
-            unsigned int bytesRead;
+            unsigned long bytesRead;
         
             bytesRead = [self.inputStream read:buffer maxLength:1024];
             if (bytesRead <= 0) {

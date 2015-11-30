@@ -102,18 +102,7 @@
         NSURL* realTrackURI = [NSURL URLWithString:trackURI];
         [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
             if (error == nil) {
-                dispatch_async(weakSelf.voteTracksQueue, ^{
-                    //check again if track is already in list
-                    for (VoteTrack* voteTrack in weakSelf.voteTracks) {
-                        if ([voteTrack.track.uri.absoluteString isEqualToString:trackURI]) {
-                            return;
-                        }
-                    }
-            
-                    VoteTrack* voteTrack = [[VoteTrack alloc] initWithTrack:track];
-                    [weakSelf.voteTracks addObject:voteTrack];
-                    [weakSelf sortArrayAndSendTrackListChanged];
-                });
+                [weakSelf addTrack: track];
                 
             } else {
                 NSLog(@"Error getting track %@ ", error.localizedDescription);
@@ -121,6 +110,22 @@
         }];
     });
     
+}
+
+- (void)addTrack: (SPTTrack*) track {
+    __unsafe_unretained ServerConnection* weakSelf = self;
+    dispatch_async(weakSelf.voteTracksQueue, ^{
+        //check again if track is already in list
+        for (VoteTrack* voteTrack in weakSelf.voteTracks) {
+            if ([voteTrack.track.uri.absoluteString isEqualToString:track.uri.absoluteString]) {
+                return;
+            }
+        }
+        
+        VoteTrack* voteTrack = [[VoteTrack alloc] initWithTrack:track];
+        [weakSelf.voteTracks addObject:voteTrack];
+        [weakSelf sortArrayAndSendTrackListChanged];
+    });
 }
 
 - (void)receivedRemoveTrack: (NSString*) trackURI {
@@ -141,14 +146,32 @@
 - (void)user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
     __unsafe_unretained ServerConnection* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
+        BOOL alreadyInList = NO;
+        VoteTrack* chosenVoteTrack;
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
             if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
-                // Makes sure there is no doubles votes
-                [voteTrack.remoteVotes removeObject:userID];
-                [voteTrack.remoteVotes addObject:userID];
+                chosenVoteTrack = voteTrack;
+                alreadyInList = YES;
             }
         }
-        [weakSelf sortArrayAndSendTrackListChanged];
+        
+        if (alreadyInList) {
+            // Makes sure there is no doubles votes
+            [chosenVoteTrack.remoteVotes removeObject:userID];
+            [chosenVoteTrack.remoteVotes addObject:userID];
+            [weakSelf sortArrayAndSendTrackListChanged];
+            
+        } else if (alreadyInList == NO) {
+            NSURL* realTrackURI = [NSURL URLWithString:trackURI];
+            [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
+                if (error == nil) {
+                    [weakSelf addTrack:track];
+                    [weakSelf user:userID addedVoteForTrack:trackURI];
+                } else {
+                    NSLog(@"Error getting track %@ ", error.localizedDescription);
+                }
+            }];
+        }
     });
 }
 

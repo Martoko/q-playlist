@@ -18,8 +18,6 @@
 
 @implementation AddItemToJoinedServerTableViewController
 
-#warning only gets a star/vote on remote, not on local
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     

@@ -20,7 +20,7 @@
 
 @end
 
-#warning what happens, if the user is signed out remotely while the server is running?
+#warning P:LOW; what happens, if the user is signed out remotely while the server is running?
 
 @implementation MusicVoterServer
 
@@ -309,7 +309,7 @@
 }
 
 -(void) sendTrackAddedToAllClients: (NSString*) trackURI {
-#warning sendTrackAddedToAllClients is called way too often
+#warning P:LOW; sendTrackAddedToAllClients is called way too often
     NSLog(@"warning: sendTrackAddedToAllClients is called way too often");
     for (Connection* connection in self.connections) {
         [connection sendAddTrack:trackURI];
