@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B613CC1D1C19CD040021C511 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B613CC1C1C19CD040021C511 /* iAd.framework */; };
 		B62450E31BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */; };
 		B62450E41BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */; };
 		B62450ED1BED431E000ACBD3 /* CreateServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B613CC1C1C19CD040021C511 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		B62450BB1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemToCreatedServerTableViewController.h; sourceTree = "<group>"; };
 		B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddItemToCreatedServerTableViewController.m; sourceTree = "<group>"; };
 		B62450BD1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddItemToJoinedServerTableViewController.h; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B613CC1D1C19CD040021C511 /* iAd.framework in Frameworks */,
 				B62451011BED45BE000ACBD3 /* SystemConfiguration.framework in Frameworks */,
 				B62450FF1BED43F3000ACBD3 /* Spotify.framework in Frameworks */,
 				B62450FD1BED43CB000ACBD3 /* AVFoundation.framework in Frameworks */,
@@ -144,6 +147,7 @@
 		B6372EA41BD4D22F00574261 = {
 			isa = PBXGroup;
 			children = (
+				B613CC1C1C19CD040021C511 /* iAd.framework */,
 				B62451001BED45BE000ACBD3 /* SystemConfiguration.framework */,
 				B62450FE1BED43F3000ACBD3 /* Spotify.framework */,
 				B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */,

@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MusicVoterConnectionViewController.h"
 #import "AddItemToJoinedServerTableViewController.h"
+#import <iAd/iAd.h>
 
-@interface JoinedServerViewController : MusicVoterConnectionViewController<AddItemToJoinedServerTableViewControllerDelegate>
+@interface JoinedServerViewController : MusicVoterConnectionViewController<AddItemToJoinedServerTableViewControllerDelegate, ADBannerViewDelegate>
 
 @end
