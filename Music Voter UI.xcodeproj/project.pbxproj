@@ -81,7 +81,7 @@
 		B62451071BEFAB77000ACBD3 /* JoinedServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinedServerViewController.m; sourceTree = "<group>"; };
 		B62451091BEFDAB6000ACBD3 /* CreatedServerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatedServerViewController.h; sourceTree = "<group>"; };
 		B624510A1BEFDAB6000ACBD3 /* CreatedServerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatedServerViewController.m; sourceTree = "<group>"; };
-		B6372EAD1BD4D22F00574261 /* Music Voter UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Music Voter UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6372EAD1BD4D22F00574261 /* Orbis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orbis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6372EB11BD4D22F00574261 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B6372EB31BD4D22F00574261 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B6372EB41BD4D22F00574261 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 		B6372EAE1BD4D22F00574261 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B6372EAD1BD4D22F00574261 /* Music Voter UI.app */,
+				B6372EAD1BD4D22F00574261 /* Orbis.app */,
 				B6372EC61BD4D22F00574261 /* Music Voter UITests.xctest */,
 				B6372ED11BD4D22F00574261 /* Music Voter UIUITests.xctest */,
 			);
@@ -280,9 +280,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B6372EAC1BD4D22F00574261 /* Music Voter UI */ = {
+		B6372EAC1BD4D22F00574261 /* Orbis */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B6372EDA1BD4D22F00574261 /* Build configuration list for PBXNativeTarget "Music Voter UI" */;
+			buildConfigurationList = B6372EDA1BD4D22F00574261 /* Build configuration list for PBXNativeTarget "Orbis" */;
 			buildPhases = (
 				B6372EA91BD4D22F00574261 /* Sources */,
 				B6372EAA1BD4D22F00574261 /* Frameworks */,
@@ -292,9 +292,9 @@
 			);
 			dependencies = (
 			);
-			name = "Music Voter UI";
+			name = Orbis;
 			productName = "Music Voter UI";
-			productReference = B6372EAD1BD4D22F00574261 /* Music Voter UI.app */;
+			productReference = B6372EAD1BD4D22F00574261 /* Orbis.app */;
 			productType = "com.apple.product-type.application";
 		};
 		B6372EC51BD4D22F00574261 /* Music Voter UITests */ = {
@@ -369,7 +369,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B6372EAC1BD4D22F00574261 /* Music Voter UI */,
+				B6372EAC1BD4D22F00574261 /* Orbis */,
 				B6372EC51BD4D22F00574261 /* Music Voter UITests */,
 				B6372ED01BD4D22F00574261 /* Music Voter UIUITests */,
 			);
@@ -454,12 +454,12 @@
 /* Begin PBXTargetDependency section */
 		B6372EC81BD4D22F00574261 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B6372EAC1BD4D22F00574261 /* Music Voter UI */;
+			target = B6372EAC1BD4D22F00574261 /* Orbis */;
 			targetProxy = B6372EC71BD4D22F00574261 /* PBXContainerItemProxy */;
 		};
 		B6372ED31BD4D22F00574261 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B6372EAC1BD4D22F00574261 /* Music Voter UI */;
+			target = B6372EAC1BD4D22F00574261 /* Orbis */;
 			targetProxy = B6372ED21BD4D22F00574261 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -578,7 +578,7 @@
 				INFOPLIST_FILE = "Music Voter UI/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "MathiasAndMagnus.Music-Voter-UI";
+				PRODUCT_BUNDLE_IDENTIFIER = MathiasAndMagnus.Orbis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -598,7 +598,7 @@
 				INFOPLIST_FILE = "Music Voter UI/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "MathiasAndMagnus.Music-Voter-UI";
+				PRODUCT_BUNDLE_IDENTIFIER = MathiasAndMagnus.Orbis;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 			};
@@ -664,7 +664,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B6372EDA1BD4D22F00574261 /* Build configuration list for PBXNativeTarget "Music Voter UI" */ = {
+		B6372EDA1BD4D22F00574261 /* Build configuration list for PBXNativeTarget "Orbis" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B6372EDB1BD4D22F00574261 /* Debug */,

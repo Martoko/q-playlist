@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B6372EAC1BD4D22F00574261"
-               BuildableName = "Music Voter UI.app"
-               BlueprintName = "Music Voter UI"
+               BuildableName = "Orbis.app"
+               BlueprintName = "Orbis"
                ReferencedContainer = "container:Music Voter UI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -53,8 +53,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B6372EAC1BD4D22F00574261"
-            BuildableName = "Music Voter UI.app"
-            BlueprintName = "Music Voter UI"
+            BuildableName = "Orbis.app"
+            BlueprintName = "Orbis"
             ReferencedContainer = "container:Music Voter UI.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -76,8 +76,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B6372EAC1BD4D22F00574261"
-            BuildableName = "Music Voter UI.app"
-            BlueprintName = "Music Voter UI"
+            BuildableName = "Orbis.app"
+            BlueprintName = "Orbis"
             ReferencedContainer = "container:Music Voter UI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -95,8 +95,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B6372EAC1BD4D22F00574261"
-            BuildableName = "Music Voter UI.app"
-            BlueprintName = "Music Voter UI"
+            BuildableName = "Orbis.app"
+            BlueprintName = "Orbis"
             ReferencedContainer = "container:Music Voter UI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
