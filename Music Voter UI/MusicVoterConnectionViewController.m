@@ -184,7 +184,6 @@
 }
 
 -(void) nowPlayingChangedTo:(SPTPartialTrack *)track {
-    NSLog(@"Now playing changed to: %@", track.identifier);
     if (track.identifier != NULL) {
         self.trackLabel.text = track.name;
         self.albumLabel.text = track.album.name;

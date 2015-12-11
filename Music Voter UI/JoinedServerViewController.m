@@ -69,6 +69,9 @@
         
     }
     else {
+        NSLayoutConstraint *verticalBottomConstraint = self.bottomConstraint;
+        verticalBottomConstraint.constant = 0;
+        
         // hide the banner off screen further off the bottom
         bannerFrame.origin.y = contentFrame.size.height;
     }
