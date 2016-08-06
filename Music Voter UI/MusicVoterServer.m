@@ -84,7 +84,6 @@
 }
 
 -(void) publish {
-    NSLog(@"is publishing");
     [self.bonjourServer publish];
     
     SPTAuth* auth = [SPTAuth defaultInstance];
@@ -101,14 +100,6 @@
             weakSelf.player = nil;
         }
         [weakSelf updatePublishedStatus];
-        //DEBUG
-        NSURL* url = [NSURL URLWithString:@"spotify:track:478d70Vg2ljAG28eeDp2w5"];
-        [weakSelf receivedAddTrack:[url absoluteString]];
-        url = [NSURL URLWithString:@"spotify:track:38kZrYqFXrF96N3eLqKqqu"];
-        [weakSelf receivedAddTrack:[url absoluteString]];
-        url = [NSURL URLWithString:@"spotify:track:19UMWSbRxT22OUT961Gkwc"];
-        [weakSelf receivedAddTrack:[url absoluteString]];
-        //DEBUG END
     }];
 }
 
@@ -310,7 +301,7 @@
 
 -(void) sendTrackAddedToAllClients: (NSString*) trackURI {
 #warning P:LOW; sendTrackAddedToAllClients is called way too often
-    NSLog(@"warning: sendTrackAddedToAllClients is called way too often");
+    // NSLog(@"warning: sendTrackAddedToAllClients is called way too often");
     for (Connection* connection in self.connections) {
         [connection sendAddTrack:trackURI];
     }
