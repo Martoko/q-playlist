@@ -82,9 +82,10 @@
 }
 
 -(void)sortArray {
-    [self.voteTracks sortUsingComparator:^NSComparisonResult(VoteTrack*  _Nonnull voteTrack1, VoteTrack*  _Nonnull voteTrack2) {
-        return voteTrack1.remoteVotes.count < voteTrack2.remoteVotes.count;
-    }];
+    NSSortDescriptor *remoteVotesSorter = [[NSSortDescriptor alloc] initWithKey:@"remoteVotes.@count" ascending:NO];
+    NSSortDescriptor *playableUriSorter = [[NSSortDescriptor alloc] initWithKey:@"track.uri.absoluteString" ascending:NO];
+    
+    [self.voteTracks sortUsingDescriptors:[NSArray arrayWithObjects:remoteVotesSorter, playableUriSorter, nil]];
 }
 
 #pragma mark - Connection delegate

@@ -15,7 +15,6 @@
 		B62450F51BED431E000ACBD3 /* VoteTrackTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450DE1BED431E000ACBD3 /* VoteTrackTableViewCell.m */; };
 		B62450F61BED431E000ACBD3 /* SpotifyAuthenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450E01BED431E000ACBD3 /* SpotifyAuthenticator.m */; };
 		B62450FD1BED43CB000ACBD3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */; };
-		B62450FF1BED43F3000ACBD3 /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62450FE1BED43F3000ACBD3 /* Spotify.framework */; };
 		B62451011BED45BE000ACBD3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62451001BED45BE000ACBD3 /* SystemConfiguration.framework */; };
 		B62451051BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62451041BEFA3D1000ACBD3 /* MusicVoterConnectionViewController.m */; };
 		B62451081BEFAB77000ACBD3 /* JoinedServerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62451071BEFAB77000ACBD3 /* JoinedServerViewController.m */; };
@@ -31,6 +30,7 @@
 		B643BCB91BED2D2B00688937 /* play.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B643BCB51BED2D2B00688937 /* play.pdf */; };
 		B643BCBA1BED2D2B00688937 /* star_blank.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B643BCB61BED2D2B00688937 /* star_blank.pdf */; };
 		B643BCBB1BED2D2B00688937 /* star_filled.pdf in Resources */ = {isa = PBXBuildFile; fileRef = B643BCB71BED2D2B00688937 /* star_filled.pdf */; };
+		B6624F0E1D5F6479004FB8C5 /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62450FE1BED43F3000ACBD3 /* Spotify.framework */; };
 		B67D4E761BED41EA004CFE38 /* RawConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = B67D4E711BED41EA004CFE38 /* RawConnection.m */; };
 		B67D4E771BED41EA004CFE38 /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = B67D4E731BED41EA004CFE38 /* Connection.m */; };
 		B67D4E781BED41EA004CFE38 /* VoteTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = B67D4E751BED41EA004CFE38 /* VoteTrack.m */; };
@@ -120,9 +120,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6624F0E1D5F6479004FB8C5 /* Spotify.framework in Frameworks */,
 				B613CC1D1C19CD040021C511 /* iAd.framework in Frameworks */,
 				B62451011BED45BE000ACBD3 /* SystemConfiguration.framework in Frameworks */,
-				B62450FF1BED43F3000ACBD3 /* Spotify.framework in Frameworks */,
 				B62450FD1BED43CB000ACBD3 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

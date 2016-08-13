@@ -62,7 +62,7 @@
     self.bonjourServer.delegate = nil;
     self.player.playbackDelegate = nil;
     self.player.delegate = nil;
-    [self.player logout:nil];
+    [self audioStreamingDidLogout:nil];
 }
 
 - (NSArray<VoteTrack*>*) getVoteTracks {
@@ -77,7 +77,7 @@
     return self.player.isPlaying;
 }
 
-- (void)connectIfNot {
+- (void) connectIfNot {
     if (self.published == NO) {
         [self publish];
     }
@@ -88,19 +88,25 @@
     
     SPTAuth* auth = [SPTAuth defaultInstance];
     
-    self.player = [[SPTAudioStreamingController alloc]initWithClientId: auth.clientID];
-    self.player.playbackDelegate = self;
-    self.player.diskCache = [[SPTDiskCache alloc] initWithCapacity: 1024 * 1024 * 64 /*mb*/];
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
-    [self.player loginWithSession:self.session callback:^(NSError *error) {
-        if (error != nil) {
-            NSLog(@"Error logging in to player %@ ", error.localizedDescription);
-            weakSelf.bonjourServer.delegate = nil;
-            weakSelf.bonjourServer = nil;
-            weakSelf.player = nil;
+    if (self.player == nil) {
+        NSError *error = nil;
+        self.player = [SPTAudioStreamingController sharedInstance];
+        if ([self.player startWithClientId: auth.clientID error: &error]) {
+            self.player.delegate = self;
+            self.player.playbackDelegate = self;
+            self.player.diskCache = [[SPTDiskCache alloc] initWithCapacity: 1024 * 1024 * 64];
+            [self.player loginWithAccessToken: auth.session.accessToken];
+        } else {
+            self.bonjourServer.delegate = nil;
+            self.bonjourServer = nil;
+            self.player = nil;
+            
+            NSLog(@"Error logging in to Spotify: %@", error.description);
+            [self audioStreamingDidLogout:nil];
+            [self.delegate connectionTerminated];
         }
-        [weakSelf updatePublishedStatus];
-    }];
+        [self updatePublishedStatus];
+    }
 }
 
 -(void) playNextTrack {
@@ -119,9 +125,12 @@
             
             [weakSelf removeTrack:currentVoteTrack];
             
-            [weakSelf.player playURIs:weakSelf.nowPlayingURIs fromIndex:0 callback:^(NSError *error) {
+            [weakSelf.player playURIs:weakSelf.nowPlayingURIs  fromIndex:0 callback:^(NSError *error) {
                 if (error != nil) {
-                    NSLog(@"Error playing song: %@", error.localizedDescription);
+                    NSLog(@"Error playing song: %@", error.description);
+                    if (weakSelf.voteTracks.count > 0) {
+                        [weakSelf playNextTrack];
+                    }
                 }
             }];
         } else {
@@ -214,9 +223,10 @@
 }
 
 -(void)sortArray {
-    [self.voteTracks sortUsingComparator:^NSComparisonResult(VoteTrack*  _Nonnull voteTrack1, VoteTrack*  _Nonnull voteTrack2) {
-        return voteTrack1.remoteVotes.count < voteTrack2.remoteVotes.count;
-    }];
+    NSSortDescriptor *remoteVotesSorter = [[NSSortDescriptor alloc] initWithKey:@"remoteVotes.@count" ascending:NO];
+    NSSortDescriptor *playableUriSorter = [[NSSortDescriptor alloc] initWithKey:@"track.uri.absoluteString" ascending:NO];
+    
+    [self.voteTracks sortUsingDescriptors:[NSArray arrayWithObjects:remoteVotesSorter, playableUriSorter, nil]];
 }
 
 #pragma mark - BonjourServerDelegate
@@ -276,6 +286,11 @@
         VoteTrack* newVoteTrack = [[VoteTrack alloc] initWithTrack:track];
         
         BOOL alreadyInList = NO;
+        
+        if(track.playableUri.absoluteString == nil) {
+            NSLog(@"Track has no playable URI: %@", track.name);
+            return;
+        }
         
         //only add if not already in list
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
@@ -402,6 +417,7 @@
 }
 
 #pragma mark - Spotify player delegate
+
 -(void)audioStreaming:(SPTAudioStreamingController *)audioStreaming didChangeToTrack:(NSDictionary *)trackMetadata {
     __unsafe_unretained MusicVoterServer* weakSelf = self;
     
@@ -435,5 +451,37 @@
     }
 }
 
+
+- (void)audioStreaming:(SPTAudioStreamingController *)audioStreaming didReceiveMessage:(NSString *)message {
+    NSLog(@"Message from Spotify: %@", message);
+}
+
+- (void)audioStreaming:(SPTAudioStreamingController *)audioStreaming didFailToPlayTrack:(NSURL *)trackUri {
+    NSLog(@"failed to play track: %@", trackUri);
+}
+
+- (void)audioStreaming:(SPTAudioStreamingController *)audioStreaming didChangePlaybackStatus:(BOOL)isPlaying {
+    NSLog(@"is playing = %d", isPlaying);
+}
+
+- (void)audioStreamingDidLogout:(SPTAudioStreamingController *)audioStreaming {
+    NSError *error = nil;
+    if (![self.player stopWithError:&error]) {
+        NSLog(@"Error logging out off Spotify: %@", error.description);
+        [self audioStreamingDidLogout:nil];
+    }
+    [self updatePublishedStatus];
+}
+
+- (void)audioStreaming:(SPTAudioStreamingController *)audioStreaming didEncounterError:(NSError *)error {
+    if (error != nil) {
+        NSLog(@"*** Playback got error: %@", error);
+        return;
+    }
+}
+
+- (void)audioStreamingDidLogin:(SPTAudioStreamingController *)audioStreaming {
+    NSLog(@"Did log in");
+}
 
 @end
