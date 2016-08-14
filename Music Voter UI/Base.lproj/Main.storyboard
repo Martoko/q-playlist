@@ -43,8 +43,12 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oht-VD-RM4">
                                         <rect key="frame" x="0.0" y="179" width="560" height="178"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSv-NG-nm7">
-                                                <rect key="frame" x="240" y="74" width="81" height="30"/>
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSv-NG-nm7">
+                                                <rect key="frame" x="201" y="39" width="160" height="100"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="100" id="TTC-tN-7p0"/>
+                                                    <constraint firstAttribute="width" constant="160" id="gEu-eX-T1Z"/>
+                                                </constraints>
                                                 <state key="normal" title="Join Playlist"/>
                                                 <connections>
                                                     <segue destination="LiL-Wn-TTG" kind="show" id="rM2-CA-c0N"/>
@@ -61,7 +65,11 @@
                                         <rect key="frame" x="0.0" y="357" width="560" height="179"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="odG-0P-Cwd">
-                                                <rect key="frame" x="231" y="74" width="98" height="30"/>
+                                                <rect key="frame" x="200" y="39" width="160" height="100"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="160" id="4fd-U1-8wF"/>
+                                                    <constraint firstAttribute="height" constant="100" id="kxm-AM-hAA"/>
+                                                </constraints>
                                                 <state key="normal" title="Create Playlist"/>
                                                 <connections>
                                                     <segue destination="Bvl-Cs-Zo0" kind="show" id="OYa-rh-bvb"/>
