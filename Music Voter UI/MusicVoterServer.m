@@ -207,10 +207,18 @@
         if(error == nil) {
                 SPTPlaylistSnapshot* fullPlaylist = object;
                 SPTListPage* playlistPartialTracks = fullPlaylist.firstTrackPage;
+                NSInteger importedSongs = 0;
                 for (NSUInteger i = 0; i < playlistPartialTracks.items.count ; i++) {
                     SPTTrack* newTrack = [playlistPartialTracks.items objectAtIndex:i];
                     [weakSelf addTrack:newTrack];
+                    if(newTrack.playableUri == nil) {
+                        importedSongs += 1;
+                    }
                 }
+            
+            if(importedSongs == playlistPartialTracks.items.count) {
+                [weakSelf.delegate alert: @"It is not possible to add imported songs" withTitle: @"Cannot add songs"];
+            }
         }
     }];
 }
@@ -288,7 +296,8 @@
         BOOL alreadyInList = NO;
         
         if(track.playableUri.absoluteString == nil) {
-            NSLog(@"Track has no playable URI: %@", track.name);
+            // Skip imported tracks
+            // NSLog(@"Track has no playable URI: %@", track.name);
             return;
         }
         
@@ -481,7 +490,7 @@
 }
 
 - (void)audioStreamingDidLogin:(SPTAudioStreamingController *)audioStreaming {
-    NSLog(@"Did log in");
+//    NSLog(@"Did log in");
 }
 
 @end

@@ -37,8 +37,6 @@
     _bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
     self.bannerView.delegate = self;
     
-    NSLog(@"Google Mobile Ads SDK version: %@", [GADRequest sdkVersion]);
-    
     self.bannerView.adUnitID = @"ca-app-pub-6684572586680338/7988188404";
     self.bannerView.rootViewController = self;
     

@@ -11,6 +11,8 @@
 
 @protocol MusicVoterConnectionDelegate <NSObject>
 
+- (void) alert:(NSString*) message withTitle:(NSString*) title;
+
 - (void)connectionReady;
 - (void)trackListChanged: (NSArray<VoteTrack*>*)voteTracks;
 - (void)nowPlayingChangedTo: (SPTPartialTrack*)track;

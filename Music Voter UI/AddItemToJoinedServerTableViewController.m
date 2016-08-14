@@ -12,7 +12,7 @@
 
 @property (nonatomic) UISearchController *searchController;
 @property SPTListPage* searchResultsPage;
-@property BOOL perfomingSearch;
+@property NSDate* currentSearch;
 
 @end
 
@@ -21,7 +21,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _perfomingSearch = NO;
+    _currentSearch = nil;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchResultsPage = [[SPTListPage alloc] init];
     self.searchController.searchResultsUpdater = self;
@@ -118,7 +118,7 @@
     // strip out all the leading and trailing spaces
     NSString *strippedString = [searchText stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
-    if (self.perfomingSearch == NO && strippedString.length >= 3) {
+    if (strippedString.length >= 2) {
         [self performSearchAndUpdate:strippedString];
     }
     
@@ -126,9 +126,16 @@
 
 -(void) performSearchAndUpdate: (NSString*)searchQuery {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    self.perfomingSearch = YES;
+    self.currentSearch = [NSDate date];
+    
     __weak AddItemToJoinedServerTableViewController * weakSelf = self;
+    NSDate *searchStarted = [self.currentSearch copy];
     [SPTSearch performSearchWithQuery:searchQuery queryType:SPTQueryTypeTrack accessToken:nil callback:^(NSError *error, id resultsPage) {
+        if([searchStarted compare: weakSelf.currentSearch] != NSOrderedSame && weakSelf.currentSearch != nil) {
+            // This search was cancelled
+            return;
+        }
+        
         if (error == nil) {
             weakSelf.searchResultsPage = resultsPage;
             [weakSelf.tableView reloadData];
@@ -144,7 +151,7 @@
             [alert addAction:defaultAction];
             [weakSelf presentViewController:alert animated:YES completion:nil];
         }
-        weakSelf.perfomingSearch = NO;
+        weakSelf.currentSearch = nil;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     }];
 }

@@ -183,13 +183,12 @@
 - (void)performTrackSearchAndUpdate: (NSString*) searchQuery {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     self.currentSearch = [NSDate date];
-    __weak AddItemToCreatedServerTableViewController* weakSelf = self;
     
+    __weak AddItemToCreatedServerTableViewController* weakSelf = self;
     NSDate *searchStarted = [self.currentSearch copy];
     [SPTSearch performSearchWithQuery:searchQuery queryType:SPTQueryTypeTrack accessToken:nil callback:^(NSError *error, id resultsPage) {
         if([searchStarted compare: weakSelf.currentSearch] != NSOrderedSame && weakSelf.currentSearch != nil) {
             // This search was cancelled
-            NSLog(@"rip search");
             return;
         }
         
