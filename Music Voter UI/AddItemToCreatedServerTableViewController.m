@@ -14,7 +14,7 @@
 @property SPTListPage* searchResultsPage;
 @property SPTPlaylistList* userPlaylistList;
 @property NSArray* filteredUserPlaylists;
-@property BOOL perfomingSearch;
+@property NSDate* currentSearch;
 
 @end
 
@@ -23,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _perfomingSearch = NO;
+    _currentSearch = nil;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchResultsPage = [[SPTListPage alloc] init];
     _userPlaylistList = [[SPTPlaylistList alloc] init];
@@ -153,8 +153,7 @@
     [self updateSearchResultsForSearchController:self.searchController];
 }
 
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope
-{
+- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope {
     [self updateSearchResultsForSearchController:self.searchController];
 }
 
@@ -170,7 +169,7 @@
     NSString* scope = [self.searchController.searchBar.scopeButtonTitles objectAtIndex:self.searchController.searchBar.selectedScopeButtonIndex];
     
     if ([scope isEqualToString:@"Song"]) {
-        if (self.perfomingSearch == NO && strippedString.length >= 2) {
+        if (strippedString.length >= 2) {
             [self performTrackSearchAndUpdate:strippedString];
         } else {
             [self.tableView reloadData];
@@ -183,9 +182,17 @@
 
 - (void)performTrackSearchAndUpdate: (NSString*) searchQuery {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    self.perfomingSearch = YES;
+    self.currentSearch = [NSDate date];
     __weak AddItemToCreatedServerTableViewController* weakSelf = self;
+    
+    NSDate *searchStarted = [self.currentSearch copy];
     [SPTSearch performSearchWithQuery:searchQuery queryType:SPTQueryTypeTrack accessToken:nil callback:^(NSError *error, id resultsPage) {
+        if([searchStarted compare: weakSelf.currentSearch] != NSOrderedSame && weakSelf.currentSearch != nil) {
+            // This search was cancelled
+            NSLog(@"rip search");
+            return;
+        }
+        
         if (error == nil) {
             weakSelf.searchResultsPage = resultsPage;
         } else {
@@ -200,7 +207,7 @@
             [alert addAction:defaultAction];
             [weakSelf presentViewController:alert animated:YES completion:nil];
         }
-        weakSelf.perfomingSearch = NO;
+        weakSelf.currentSearch = nil;
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         [weakSelf.tableView reloadData];
     }];
