@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B613CC1D1C19CD040021C511 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B613CC1C1C19CD040021C511 /* iAd.framework */; };
 		B62450E31BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BC1BED431E000ACBD3 /* AddItemToCreatedServerTableViewController.m */; };
 		B62450E41BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450BE1BED431E000ACBD3 /* AddItemToJoinedServerTableViewController.m */; };
 		B62450ED1BED431E000ACBD3 /* CreateServerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B62450D01BED431E000ACBD3 /* CreateServerTableViewController.m */; };
@@ -38,6 +37,7 @@
 		B67D4E7E1BED4207004CFE38 /* MusicVoterServer.m in Sources */ = {isa = PBXBuildFile; fileRef = B67D4E7C1BED4207004CFE38 /* MusicVoterServer.m */; };
 		B67D4E851BED4224004CFE38 /* BonjourBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = B67D4E821BED4224004CFE38 /* BonjourBrowser.m */; };
 		B67D4E861BED4224004CFE38 /* ServerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = B67D4E841BED4224004CFE38 /* ServerConnection.m */; };
+		B6C82C831D60407900FC9DE8 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6C82C821D60407900FC9DE8 /* GoogleMobileAds.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +113,7 @@
 		B67D4E821BED4224004CFE38 /* BonjourBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourBrowser.m; sourceTree = "<group>"; };
 		B67D4E831BED4224004CFE38 /* ServerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerConnection.h; sourceTree = "<group>"; };
 		B67D4E841BED4224004CFE38 /* ServerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerConnection.m; sourceTree = "<group>"; };
+		B6C82C821D60407900FC9DE8 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = "GoogleMobileAdsSdkiOS-7.9.1/GoogleMobileAds.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,8 +121,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6C82C831D60407900FC9DE8 /* GoogleMobileAds.framework in Frameworks */,
 				B6624F0E1D5F6479004FB8C5 /* Spotify.framework in Frameworks */,
-				B613CC1D1C19CD040021C511 /* iAd.framework in Frameworks */,
 				B62451011BED45BE000ACBD3 /* SystemConfiguration.framework in Frameworks */,
 				B62450FD1BED43CB000ACBD3 /* AVFoundation.framework in Frameworks */,
 			);
@@ -147,14 +148,15 @@
 		B6372EA41BD4D22F00574261 = {
 			isa = PBXGroup;
 			children = (
+				B6C82C821D60407900FC9DE8 /* GoogleMobileAds.framework */,
 				B613CC1C1C19CD040021C511 /* iAd.framework */,
 				B62451001BED45BE000ACBD3 /* SystemConfiguration.framework */,
 				B62450FE1BED43F3000ACBD3 /* Spotify.framework */,
 				B62450FC1BED43CB000ACBD3 /* AVFoundation.framework */,
 				B643BCBD1BED2D3C00688937 /* Icons */,
 				B6372EAF1BD4D22F00574261 /* Music Voter UI */,
-				B6372EC91BD4D22F00574261 /* Music Voter UITests */,
-				B6372ED41BD4D22F00574261 /* Music Voter UIUITests */,
+				B6372EC91BD4D22F00574261 /* Q Playlist - Tests */,
+				B6372ED41BD4D22F00574261 /* Q Playlist - UITests */,
 				B6372EAE1BD4D22F00574261 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -205,21 +207,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		B6372EC91BD4D22F00574261 /* Music Voter UITests */ = {
+		B6372EC91BD4D22F00574261 /* Q Playlist - Tests */ = {
 			isa = PBXGroup;
 			children = (
 				B6372ECA1BD4D22F00574261 /* Music_Voter_UITests.m */,
 				B6372ECC1BD4D22F00574261 /* Info.plist */,
 			);
+			name = "Q Playlist - Tests";
 			path = "Music Voter UITests";
 			sourceTree = "<group>";
 		};
-		B6372ED41BD4D22F00574261 /* Music Voter UIUITests */ = {
+		B6372ED41BD4D22F00574261 /* Q Playlist - UITests */ = {
 			isa = PBXGroup;
 			children = (
 				B6372ED51BD4D22F00574261 /* Music_Voter_UIUITests.m */,
 				B6372ED71BD4D22F00574261 /* Info.plist */,
 			);
+			name = "Q Playlist - UITests";
 			path = "Music Voter UIUITests";
 			sourceTree = "<group>";
 		};
@@ -574,6 +578,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/GoogleMobileAdsSdkiOS-7.9.1",
 				);
 				INFOPLIST_FILE = "Music Voter UI/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -595,6 +600,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/GoogleMobileAdsSdkiOS-7.9.1",
 				);
 				INFOPLIST_FILE = "Music Voter UI/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

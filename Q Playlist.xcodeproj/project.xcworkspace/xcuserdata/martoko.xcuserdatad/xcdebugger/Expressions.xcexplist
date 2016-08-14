@@ -3,6 +3,9 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "-[ServerConnection addTrack:]:ServerConnection.m">
+      </ContextState>
+      <ContextState
          contextName = "-[RawConnection tryToSendFromBuffer]:RawConnection.m">
       </ContextState>
    </ContextStates>

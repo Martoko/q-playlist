@@ -127,7 +127,7 @@
 -(void) performSearchAndUpdate: (NSString*)searchQuery {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     self.perfomingSearch = YES;
-    __unsafe_unretained AddItemToJoinedServerTableViewController * weakSelf = self;
+    __weak AddItemToJoinedServerTableViewController * weakSelf = self;
     [SPTSearch performSearchWithQuery:searchQuery queryType:SPTQueryTypeTrack accessToken:nil callback:^(NSError *error, id resultsPage) {
         if (error == nil) {
             weakSelf.searchResultsPage = resultsPage;

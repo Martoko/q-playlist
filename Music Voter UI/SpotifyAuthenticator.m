@@ -65,7 +65,7 @@
 
 - (void) sendUserAndSession: (SPTSession*) session {
     [self.delegate spotifyAuthenticatorStartedLoading:self];
-    __unsafe_unretained SpotifyAuthenticator * weakSelf = self;
+    __weak SpotifyAuthenticator * weakSelf = self;
     [SPTUser requestCurrentUserWithAccessToken:session.accessToken callback:^(NSError *error, id object) {
         if (error == nil) {
             SPTUser* currentUser = object;

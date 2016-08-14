@@ -53,7 +53,7 @@
     [super viewDidAppear:animated];
     //update user playlists
     SPTSession* spotifySession = [SPTAuth defaultInstance].session;
-    __unsafe_unretained AddItemToCreatedServerTableViewController* weakSelf = self;
+    __weak AddItemToCreatedServerTableViewController* weakSelf = self;
     [SPTPlaylistList playlistsForUserWithSession:spotifySession callback:^(NSError *error, id playlistList) {
         if(error == nil) {
             weakSelf.userPlaylistList = playlistList;
@@ -184,7 +184,7 @@
 - (void)performTrackSearchAndUpdate: (NSString*) searchQuery {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     self.perfomingSearch = YES;
-    __unsafe_unretained AddItemToCreatedServerTableViewController* weakSelf = self;
+    __weak AddItemToCreatedServerTableViewController* weakSelf = self;
     [SPTSearch performSearchWithQuery:searchQuery queryType:SPTQueryTypeTrack accessToken:nil callback:^(NSError *error, id resultsPage) {
         if (error == nil) {
             weakSelf.searchResultsPage = resultsPage;

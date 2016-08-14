@@ -6,11 +6,12 @@
 //  Copyright © 2015 Mathias & Magnus. All rights reserved.
 //
 
+@import GoogleMobileAds;
 #import <UIKit/UIKit.h>
 #import "MusicVoterConnectionViewController.h"
 #import "AddItemToJoinedServerTableViewController.h"
 #import <iAd/iAd.h>
 
-@interface JoinedServerViewController : MusicVoterConnectionViewController<AddItemToJoinedServerTableViewControllerDelegate, ADBannerViewDelegate>
+@interface JoinedServerViewController : MusicVoterConnectionViewController<AddItemToJoinedServerTableViewControllerDelegate, GADBannerViewDelegate>
 
 @end

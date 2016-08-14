@@ -12,7 +12,8 @@
 
 // contentView's vertical bottom constraint, used to alter the contentView's vertical size when ads arrive
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *bottomConstraint;
-@property (nonatomic, strong) ADBannerView *bannerView;
+@property (nonatomic) GADBannerView *bannerView;
+@property (nonatomic) BOOL adAvailable;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *trackLabel;
@@ -30,10 +31,39 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Joining...";
-    _bannerView = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    
+    // GAD
+    _adAvailable = NO;
+    _bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
     self.bannerView.delegate = self;
+    
+    NSLog(@"Google Mobile Ads SDK version: %@", [GADRequest sdkVersion]);
+    
+    self.bannerView.adUnitID = @"ca-app-pub-6684572586680338/7988188404";
+    self.bannerView.rootViewController = self;
+    
+    GADRequest *request = [GADRequest request];
+    request.testDevices = @[ kGADSimulatorID ];
+    [self.bannerView loadRequest:request];
+    self.bannerView.hidden = NO;
+    
     [self.view addSubview:self.bannerView];
+    // END GAD
 }
+
+//-(void) DEBUG_kill_ad {
+//    [self adView:self.bannerView didFailToReceiveAdWithError:nil];
+//    
+//    [self performSelector:@selector(DEBUG_spawn_ad) withObject:nil afterDelay:5.0];
+//}
+//
+//-(void) DEBUG_spawn_ad {
+//    GADRequest *request = [GADRequest request];
+//    request.testDevices = @[ kGADSimulatorID ];
+//    
+//    [self.bannerView loadRequest:request];
+//    [self performSelector:@selector(DEBUG_kill_ad) withObject:nil afterDelay:5.0];
+//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -52,7 +82,7 @@
     
     // compute the ad banner frame
     CGRect bannerFrame = self.bannerView.frame;
-    if (self.bannerView.bannerLoaded) {
+    if (self.adAvailable) {
         
         // bring the ad into view
         contentFrame.size.height -= sizeForBanner.height;   // shrink down content frame to fit the banner below it
@@ -88,24 +118,6 @@
     [self.musicVoterConnection sendAddedVoteForTrack:track.uri.absoluteString];
 }
 
-#pragma mark - ADBannerViewDelegate
-
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner {
-    [self layoutAnimated:YES];
-}
-
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error {
-    NSLog(@"didFailToReceiveAdWithError %@", error);
-    [self layoutAnimated:YES];
-}
-
-- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave {
-    return YES;
-}
-
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner {
-}
-
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -117,6 +129,37 @@
         newViewController.delegate = self;
         
     }
+}
+
+#pragma mark - GADBannerViewDelegate
+- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
+    //bannerView.hidden = NO;
+    
+    self.adAvailable = YES;
+    [self layoutAnimated:YES];
+}
+- (void)adView:(GADBannerView *)bannerView
+didFailToReceiveAdWithError:(GADRequestError *)error {
+    NSLog(@"adView:didFailToReceiveAdWithError: %@", error.localizedDescription);
+    self.adAvailable = NO;
+    [self layoutAnimated:YES];
+    
+    //bannerView.hidden = YES;
+}
+- (void)adViewWillPresentScreen:(GADBannerView *)bannerView {
+    /*This callback is sent immediately before the user is presented with a full-screen ad UI in response to their touching the sender. At this point, you should pause any animations, timers, or other activities that assume user interaction and save app state, much like on UIApplicationDidEnterBackgroundNotification. Typically, the user simply browses the full-screen ad and dismisses it, generating adViewDidDismissScreen: and returning control to your app. If the banner's action was either Click-to-App-Store or Click-to-iTunes or the user presses Home within the ad, however, your app will be backgrounded and potentially terminated.
+     
+     In these cases under iOS 4.0+, the next method invoked will be your root view controller's applicationWillResignActive:, followed by adViewWillLeaveApplication:.*/
+}
+- (void)adViewDidDismissScreen:(GADBannerView *)bannerView {
+    /*Sent when the user has exited the sender's full-screen UI.*/
+}
+- (void)adViewWillDismissScreen:(GADBannerView *)bannerView {
+    /*Sent immediately before the sender's full-screen UI is dismissed, restoring your app and the root view controller. At this point, you should restart any foreground activities paused as part of adViewWillPresentScreen:.*/
+}
+- (void)adViewWillLeaveApplication:(GADBannerView *)bannerView {
+    /*Sent just before the app gets backgrounded or terminated as a result of the user touching a Click-to-App-Store or Click-to-iTunes banner. The normal UIApplicationDelegate notifications like applicationDidEnterBackground: arrive immediately before this.
+     Do not request an ad in applicationWillEnterForeground:, as the request will be ignored. Place the request in applicationDidBecomeActive: instead.*/
 }
 
 @end

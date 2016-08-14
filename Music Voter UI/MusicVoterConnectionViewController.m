@@ -219,7 +219,7 @@
         NSLog(@"Error imageURL is nil");
         return;
     }
-    __unsafe_unretained MusicVoterConnectionViewController * weakSelf = self;
+    __weak MusicVoterConnectionViewController * weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error = nil;
         UIImage *image = nil;

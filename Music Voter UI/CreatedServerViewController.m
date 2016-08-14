@@ -23,8 +23,6 @@
 
 @end
 
-//18:43:56.694 ERROR:    [0x38a77000] AVAudioSession.mm:697: -[AVAudioSession setActive:withOptions:error:]: Deactivating an audio session that has running I/O. All I/O should be stopped or paused prior to deactivating the audio session.
-
 @implementation CreatedServerViewController
 
 - (void)viewDidLoad {

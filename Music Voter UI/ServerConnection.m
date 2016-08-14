@@ -27,6 +27,8 @@
         _netService = netService;
         _connectionToServer = nil;
         _voteTracksQueue = dispatch_queue_create("joinVoteTracksQueue", DISPATCH_QUEUE_SERIAL);
+    } else {
+        NSLog(@"Error initializing server connection's parent");
     }
     return self;
 }
@@ -34,6 +36,7 @@
 - (void)dealloc
 {
     self.connectionToServer.delegate = nil;
+    
 }
 
 - (NSString*) getName {
@@ -91,7 +94,7 @@
 #pragma mark - Connection delegate
 
 - (void)receivedAddTrack: (NSString*) trackURI {
-    __unsafe_unretained ServerConnection* weakSelf = self;
+    __weak ServerConnection* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         //check if track is already in list
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
@@ -114,7 +117,7 @@
 }
 
 - (void)addTrack: (SPTTrack*) track {
-    __unsafe_unretained ServerConnection* weakSelf = self;
+    __weak ServerConnection* weakSelf = self;
     dispatch_async(weakSelf.voteTracksQueue, ^{
         //check again if track is already in list
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
@@ -130,7 +133,7 @@
 }
 
 - (void)receivedRemoveTrack: (NSString*) trackURI {
-    __unsafe_unretained ServerConnection* weakSelf = self;
+    __weak ServerConnection* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         VoteTrack* trackToRemove = nil;
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
@@ -145,7 +148,7 @@
 }
 
 - (void)user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
-    __unsafe_unretained ServerConnection* weakSelf = self;
+    __weak ServerConnection* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         BOOL alreadyInList = NO;
         VoteTrack* chosenVoteTrack;
@@ -177,7 +180,7 @@
 }
 
 - (void)user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
-    __unsafe_unretained ServerConnection* weakSelf = self;
+    __weak ServerConnection* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
             if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
@@ -195,7 +198,7 @@
     if ([trackURI  isEqualToString: @"none"]) {
         [self.delegate nowPlayingChangedTo:[[SPTTrack alloc] init]];
     } else {
-        __unsafe_unretained ServerConnection * weakSelf = self;
+        __weak ServerConnection * weakSelf = self;
         [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
             if (error == nil) {
                 [weakSelf.delegate nowPlayingChangedTo:track];

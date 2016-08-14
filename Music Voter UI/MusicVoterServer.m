@@ -110,7 +110,7 @@
 }
 
 -(void) playNextTrack {
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     
     dispatch_async(self.voteTracksQueue, ^{
         _isPaused = NO;
@@ -202,7 +202,7 @@
 }
 
 -(void) addItemsFromPlaylist: (SPTPartialPlaylist*) partialPlaylist {
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     [SPTPlaylistSnapshot playlistWithURI:partialPlaylist.uri session:self.session callback:^(NSError *error, id object) {
         if(error == nil) {
                 SPTPlaylistSnapshot* fullPlaylist = object;
@@ -243,7 +243,7 @@
 }
 
 -(void) removeTrack: (VoteTrack*) voteTrack {
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         [weakSelf removeTrackFromAllClients: voteTrack];
         [weakSelf.voteTracks removeObject:voteTrack];
@@ -270,7 +270,7 @@
 //received track
 - (void)receivedAddTrack: (NSString*) trackURI {
     NSURL* realTrackURI = [NSURL URLWithString:trackURI];
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     [SPTTrack trackWithURI:realTrackURI session:nil callback:^(NSError *error, id track) {
         if (error == nil) {
             [weakSelf addTrack:track];
@@ -281,7 +281,7 @@
 }
 
 - (void)addTrack: (SPTTrack*) track {
-     __unsafe_unretained MusicVoterServer* weakSelf = self;
+     __weak MusicVoterServer* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         VoteTrack* newVoteTrack = [[VoteTrack alloc] initWithTrack:track];
         
@@ -329,7 +329,7 @@
 }
 
 - (void)user: (NSString*) userID addedVoteForTrack: (NSString*) trackURI {
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         BOOL alreadyInList = NO;
         VoteTrack* chosenVoteTrack;
@@ -374,7 +374,7 @@
 }
 
 - (void)user: (NSString*) userID removedVoteForTrack: (NSString*) trackURI {
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
             if ([voteTrack.track.uri.absoluteString isEqualToString: trackURI]) {
@@ -405,7 +405,7 @@
 }
 
 -(void) sendAllTracksAddedToClient: (Connection*) client {
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     dispatch_async(self.voteTracksQueue, ^{
         for (VoteTrack* voteTrack in weakSelf.voteTracks) {
             [client sendAddTrack:voteTrack.track.uri.absoluteString];
@@ -419,7 +419,7 @@
 #pragma mark - Spotify player delegate
 
 -(void)audioStreaming:(SPTAudioStreamingController *)audioStreaming didChangeToTrack:(NSDictionary *)trackMetadata {
-    __unsafe_unretained MusicVoterServer* weakSelf = self;
+    __weak MusicVoterServer* weakSelf = self;
     
     if (self.player.currentTrackURI.absoluteString == nil) {
         dispatch_async(self.voteTracksQueue, ^{

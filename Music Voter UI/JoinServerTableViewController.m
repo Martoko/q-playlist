@@ -22,12 +22,14 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     self.bonjourBrowser = [[BonjourBrowser alloc] init];
     self.bonjourBrowser.delegate = self;
     [self.tableView reloadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     self.bonjourBrowser.delegate = nil;
     self.bonjourBrowser = nil;
 }
