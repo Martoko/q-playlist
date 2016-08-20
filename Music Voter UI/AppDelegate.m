@@ -38,11 +38,12 @@
         
         if (error != nil) {
             NSLog(@"*** Auth error: %@", error);
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"callbackFailedToLogin" object:self userInfo:[NSDictionary dictionaryWithObject:error forKey:@"error"]];
             return;
         }
         
         auth.session = session;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"sessionUpdated" object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"callbackLoggedIn" object:self];
     };
     
     /*

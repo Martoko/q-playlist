@@ -37,6 +37,9 @@
         _viewController.modalPresentationStyle = UIModalPresentationCurrentContext;
         _viewController.definesPresentationContext = YES;
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callbackLoggedIn:) name:@"callbackLoggedIn" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callbackFailedToLogin:) name:@"callbackFailedToLogin" object:nil];
     return self;
 }
 
@@ -78,6 +81,14 @@
     [self.authViewController clearCookies:nil];
 }
 
+#pragma mark - Login Notifications
+- (void)callbackLoggedIn:(NSNotification *)notification {
+    // We got a new session, lets check if it is valid
+    [self restoreOldSessionIfValidOtherwiseClearIt];
+}
+- (void)callbackFailedToLogin:(NSNotification *)notification {
+    [self.delegate spotifyAuthenticator:self failedToLoginWithError:[notification.userInfo objectForKey:@"error"]];
+}
 
 #pragma mark - SPTAuthDelegate
 
