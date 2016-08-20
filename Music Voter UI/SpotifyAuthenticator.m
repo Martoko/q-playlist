@@ -85,9 +85,15 @@
 - (void)callbackLoggedIn:(NSNotification *)notification {
     // We got a new session, lets check if it is valid
     [self restoreOldSessionIfValidOtherwiseClearIt];
+    if (self.authViewController.isViewLoaded) {
+        [self.authViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 - (void)callbackFailedToLogin:(NSNotification *)notification {
     [self.delegate spotifyAuthenticator:self failedToLoginWithError:[notification.userInfo objectForKey:@"error"]];
+    if (self.authViewController.isViewLoaded) {
+        [self.authViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - SPTAuthDelegate
